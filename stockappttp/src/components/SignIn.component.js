@@ -6,22 +6,22 @@ export default class SignIn extends Component {
     constructor(props) {
         super(props);
 
-        this.onChangeSignInUser = this.onChangeSignInUser.bind(this);
+        this.onChangeSignInEmail = this.onChangeSignInEmail.bind(this);
         this.onChangeSignInpassword = this.onChangeSignInpassword.bind(this);
         //this.onChangeSignInPriority = this.onChangeSignInPriority.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
-            SignIn_User: '',
+            SignIn_Email: '',
             SignIn_password: '',
             //SignIn_priority: '',
             SignIn_completed: false
         }
     }
 
-    onChangeSignInUser(e) {
+    onChangeSignInEmail(e) {
         this.setState({
-            SignIn_User: e.target.value
+            SignIn_Email: e.target.value
         });
     }
 
@@ -41,27 +41,27 @@ export default class SignIn extends Component {
         e.preventDefault();
         
         console.log(`Form submitted:`);
-        console.log(`SignIn User: ${this.state.SignIn_User}`);
+        console.log(`SignIn Email: ${this.state.SignIn_Email}`);
         console.log(`SignIn password: ${this.state.SignIn_password}`);
         //console.log(`SignIn Priority: ${this.state.SignIn_priority}`);
         const newLogin = {
-            User: this.state.SignIn_User,
+            Email: this.state.SignIn_Email,
             Password: this.state.SignIn_password,
             completed: this.state.SignIn_completed
         };
-        console.log(newLogin.User);
+        console.log(newLogin.Email);
         /*axios.get('http://localhost:5000/dbRoute/addToDB', newLogin)
             .then(res => console.log(res.data));*/
             
         axios.get('http://localhost:5000/dbRoute/db', {
             params: {
-                username : newLogin.User,
+                email : newLogin.Email,
                 password : newLogin.Password
             }
         }).then(res => console.log(res.data));    
             
         this.setState({
-            SignIn_User: '',
+            SignIn_Email: '',
             SignIn_password: '',
             //SignIn_priority: '',
             SignIn_completed: false
@@ -79,8 +79,8 @@ export default class SignIn extends Component {
                                 <label>Email: </label>
                                 <input  type="text"
                                         className="form-control center_div"
-                                        value={this.state.SignIn_User}
-                                        onChange={this.onChangeSignInUser}
+                                        value={this.state.SignIn_Email}
+                                        onChange={this.onChangeSignInEmail}
                                         style={{ width: '500px'}}
                                         
                                         />
