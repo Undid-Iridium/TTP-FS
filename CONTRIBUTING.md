@@ -74,7 +74,7 @@
 
   The following command will run *test.js in src/myapp/test/src/
    
-  In src/myapp/test run:
+  In stockapptpp run:
   ```shell
   npm test
   ```
