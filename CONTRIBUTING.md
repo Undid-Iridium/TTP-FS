@@ -8,7 +8,7 @@
 
 # Getting started  
   * Express lives in stockappttp/backend
-    - Code your API in this file, such as log in, get data, etc. (Default Port: (http://localhost:5000/)
+    - Code your API in this file, such as log in, get data, etc. (Default Port: (http://localhost:5000/))
   * React lives in stockappttp/src
     - This js script will edit what you see on the main page of front end (http://localhost:3000/).
     
