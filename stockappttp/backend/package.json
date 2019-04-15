@@ -1,0 +1,27 @@
+{
+  "name": "StockAPPTTP",
+  "version": "1.0.0",
+  "description": "Stockapp to evaluate current purchased/all stocks",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Undid-Iridium/TTP-FS.git"
+  },
+  "author": "Francis X Irizarry",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/Undid-Iridium/TTP-FS/issues"
+  },
+  "homepage": "https://github.com/Undid-Iridium/TTP-FS#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "mongodb": "^3.2.3"
+  }
+}
