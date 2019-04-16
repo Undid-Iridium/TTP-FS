@@ -4,10 +4,7 @@ import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import "../../App.css";
 class Dashboard extends Component {
-  onLogoutClick = e => {
-    e.preventDefault();
-    this.props.logoutUser();
-  };
+ 
 
   render() {
     const { user } = this.props.auth;
@@ -31,10 +28,7 @@ class Dashboard extends Component {
   }
 }
 
-Dashboard.propTypes = {
-  logoutUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
-};
+
 
 const mapStateToProps = state => ({
   auth: state.auth
@@ -44,3 +38,5 @@ export default connect(
   mapStateToProps,
   { logoutUser }
 )(Dashboard);
+
+//Can use this page to show summary of stocks
