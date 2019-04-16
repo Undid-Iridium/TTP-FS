@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+//import { Auth } from "aws-amplify";
 export default class SignIn extends Component {
 
     constructor(props) {
@@ -19,6 +19,9 @@ export default class SignIn extends Component {
         }
     }
 
+    validateForm() {
+      return this.state.SignIn_Email.length > 0 && this.state.SignIn_password.length > 0;
+    }
     onChangeSignInEmail(e) {
         this.setState({
             SignIn_Email: e.target.value
@@ -36,6 +39,16 @@ export default class SignIn extends Component {
     //        SignIn_priority: e.target.value
     //    });
     //}
+
+    /*handleSubmit(event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    alert("Logged in");
+    /*fetch('/api/form-submit-url', {
+      method: 'POST',
+      body: data,
+    });*/
+       
 
     onSubmit(e) {
         e.preventDefault();
@@ -58,7 +71,7 @@ export default class SignIn extends Component {
                 email : newLogin.Email,
                 password : newLogin.Password
             }
-        }).then(res => console.log(res.data));    
+        }).then(res => console.log(res.data), alert("Hey"));    
             
         this.setState({
             SignIn_Email: '',
@@ -71,9 +84,10 @@ export default class SignIn extends Component {
     render() {
         return (
             <div>
+            
                 <div style={{marginTop: 10}}>
-                    <h3 class = "App big white-box">Sign in</h3>
-                     <div class = "white-box-Upper">
+                    <h3 className = "App big white-box">Sign in</h3>
+                     <div className = "white-box-Upper">
                        <form onSubmit={this.onSubmit}>
                             <div className="form-group App "> 
                                 <label>Email: </label>
@@ -132,7 +146,7 @@ export default class SignIn extends Component {
                             </div>*/}
 
                             <div className="form-group App">
-                                <input type="submit" value="Login" className="btn btn-primary" />
+                                <input type="submit" value="Login" className="btn btn-primary" disabled={!this.validateForm()}/>
                             </div>
                        </form>
                      </div>

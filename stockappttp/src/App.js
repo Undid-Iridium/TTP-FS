@@ -11,18 +11,27 @@ import Account from "./components/CreateAccount.component";
 import logo from "./logo.png";
 
 class App extends Component {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        isAuthenticated: false
+      };
+    }
+
+    userHasAuthenticated = authenticated => {
+      this.setState({ isAuthenticated: authenticated });
+    }
   render() {
+    
     return (
       <Router>
         <div className="container">
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
           
-            <Link to="/" className="navbar-brand">Main page</Link>
+            <Link to="/" className="navbar-brand">Home</Link>
             <div className="collpase navbar-collapse">
               <ul className="navbar-nav mr-auto">
-                <li className="navbar-item">
-                  <Link to="/" className="nav-link">Home</Link>
-                </li>
                 <li className="navbar-item">
                   <Link to="/login" className="nav-link">Sign in</Link>
                 </li>
