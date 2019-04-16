@@ -7,15 +7,18 @@ class Navbar extends Component {
 
   constructor (props) {
   super(props)
-  this.state = { showbutton:  this.props.auth ? true : false }
+  this.state = { showbutton:  this.props.auth.isAuthenticated ? true : false }
   }
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
-    this.setState({ showButton: false })
+    this.setState({ showButton: this.props.auth.isAuthenticated })
   };
   
- 
+   handleChange(event) {
+    this.setState({ showButtom : this.props.auth.isAuthenticated });
+  }
+  
   render() {
     return (
       <div className="navbar-fixed">
@@ -31,9 +34,9 @@ class Navbar extends Component {
               <i className="material-icons">code</i>
               Home
             </Link>
-            {this.props.auth.isAuthorized ?
+            {this.props.auth.isAuthenticated ?
              <div className="rightAlign">
-            <button
+            <button ref = "but1"
               style={{
                 width: "150px",
                 borderRadius: "3px",
@@ -41,6 +44,7 @@ class Navbar extends Component {
                 marginTop: "1rem"
               }}
               onClick={this.onLogoutClick}
+              onChange= {this.handleChange}
               className="btn btn-large waves-effect waves-light hoverable blue accent-3"
             >
               Logout
