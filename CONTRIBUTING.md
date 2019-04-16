@@ -3,8 +3,12 @@
     - Express JS
     - Node JS
     - MongoDB
+    - JWTWebToken
+    - Mongoose
   * Frontend:
     - React JS
+    - Redux
+    - Axios
 
 # Getting started  
   * Express lives in stockappttp/backend
