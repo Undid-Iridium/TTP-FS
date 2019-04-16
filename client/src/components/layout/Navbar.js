@@ -1,7 +1,21 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { logoutUser } from "../../actions/authActions";
 class Navbar extends Component {
+
+  constructor (props) {
+  super(props)
+  this.state = { showbutton:  this.props.auth ? true : false }
+  }
+  onLogoutClick = e => {
+    e.preventDefault();
+    this.props.logoutUser();
+    this.setState({ showButton: false })
+  };
+  
+ 
   render() {
     return (
       <div className="navbar-fixed">
@@ -15,8 +29,25 @@ class Navbar extends Component {
               className="col s5 brand-logo center black-text"
             >
               <i className="material-icons">code</i>
-              MERN
+              Home
             </Link>
+            {this.props.auth.isAuthorized ?
+             <div className="rightAlign">
+            <button
+              style={{
+                width: "150px",
+                borderRadius: "3px",
+                letterSpacing: "1.5px",
+                marginTop: "1rem"
+              }}
+              onClick={this.onLogoutClick}
+              className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+            >
+              Logout
+            </button>
+            </div>
+            : null }
+            
           </div>
         </nav>
       </div>
@@ -24,4 +55,17 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+
+Navbar.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(Navbar);
