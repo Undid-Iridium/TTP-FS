@@ -34,7 +34,7 @@ router.post("/register", (req, res) => {
         email: req.body.email,
         password: req.body.password,
         balance: 5000,
-        transactions : {}
+        transactions : []
       });
 
       // Hash password before saving in database
@@ -82,7 +82,8 @@ router.post("/login", (req, res) => {
         // Create JWT Payload
         const payload = {
           id: user.id,
-          name: user.name
+          name: user.name,
+          balance: user.balance
         };
 
         // Sign token
@@ -90,7 +91,7 @@ router.post("/login", (req, res) => {
           payload,
           keys.secretOrKey,
           {
-            expiresIn: 31556926 // 1 year in seconds
+            expiresIn: 120000 // 1 year in seconds 31556926
           },
           (err, token) => {
             res.json({

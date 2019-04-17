@@ -3,6 +3,11 @@
   justify-content: right;
 }
 
+.centerAlign{
+  display: flex;
+  justify-content: center;
+}
+
 #footer {   
 position:fixed;
    left:0px;
@@ -16,3 +21,63 @@ position:fixed;
   display: flex;
   justify-content: left;
 }
+
+.leftAlignSpec {
+
+  display: flex;
+  justify-content: left;
+}
+
+.rightAlignSpec {
+
+  display: flex;
+  justify-content: right;
+}
+
+.parent {
+    
+    vertical-align: bottom;
+}
+
+
+.divBox {
+  text-align: center;
+  background-color: #e7f2e1;
+  width: 225px;
+  border: 0px solid #035E7B;
+  padding: 5px;
+  margin: 5px;
+  margin-top: 15%; /*set to a negative number 1/2 of your height*/
+  left: 50%;
+}
+
+.separateScreenRight {
+
+background-color: lightgrey;
+  box-sizing: border-box;
+  min-height: 80vh;
+  height:80vh;;
+  width: 40%;
+  border: 0px solid #2a2a2a;
+  padding: 10px;
+  margin: 10px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+.separateScreenLeft {
+background-color: lightgrey;
+  box-sizing: border-box;
+  min-height: 80vh;
+  height:80vh;
+  width: 40%;
+  border: 0px solid #2a2a2a;
+  padding: 10px;
+  margin: 10px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+

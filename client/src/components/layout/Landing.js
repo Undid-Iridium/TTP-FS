@@ -7,11 +7,10 @@ class Landing extends Component {
       <div style={{ height: "75vh" }} className="container valign-wrapper">
         <div className="row">
           <div className="col s12 center-align">
-            <h4>
-              TTP Stock App
-            </h4>
+            <h4>TTP Stock App</h4>
             <p className="flow-text grey-text text-darken-1">
-              Create an account, and or log in to make a profile to manage your stocks!
+              Create an account, and or log in to make a profile to manage your
+              stocks!
             </p>
             <br />
             <div className="col s6">
@@ -48,3 +47,4 @@ class Landing extends Component {
 }
 
 export default Landing;
+

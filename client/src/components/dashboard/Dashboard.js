@@ -1,14 +1,12 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { logoutUser } from "../../actions/authActions";
 import "../../App.css";
 class Dashboard extends Component {
  
 
   render() {
     const { user } = this.props.auth;
-
+   
     return (
       <div style={{ height: "75vh" }} className="container valign-wrapper">
         <div className="row">
@@ -17,7 +15,7 @@ class Dashboard extends Component {
               <b>Hey there,</b> {user.name.split(" ")[0]}
               <p className="flow-text grey-text text-darken-1">
                 You are logged into your dashboard!{" "}
-                <span style={{ fontFamily: "monospace" }}>Stock TTP</span> app 👏
+                <span style={{ fontFamily: "monospace" }}>StockTTP</span>  App 👏
               </p>
             </h4>
             
@@ -35,8 +33,7 @@ const mapStateToProps = state => ({
 });
 
 export default connect(
-  mapStateToProps,
-  { logoutUser }
+  mapStateToProps
 )(Dashboard);
 
 //Can use this page to show summary of stocks
