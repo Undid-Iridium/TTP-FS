@@ -15,6 +15,14 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  balance: {
+    type: Number,
+    required: true
+  },
+  Transactions: {
+    type: Array,
+    required: true
+  },
   date: {
     type: Date,
     default: Date.now

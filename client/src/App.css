@@ -11,3 +11,8 @@ position:fixed;
    width:100%;
    background:#999;
 }
+
+.leftAlign {
+  display: flex;
+  justify-content: left;
+}

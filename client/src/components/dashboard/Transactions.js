@@ -4,7 +4,7 @@ export default class Transactions extends Component {
     render() {
         return (
             <div>
-                <p>Welcome to Portfolio Todo Component!!</p>
+                <p>Welcome to Transaction Component!!</p>
             </div>
         )
     }
