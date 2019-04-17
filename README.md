@@ -64,7 +64,7 @@ sudo apt-get install npm --yes
   * After you edit that file, run the following to load in the [sysctl](https://linux.die.net/man/8/sysctl) setting from /etc/sysctl.conf
   ```shell
   sudo sysctl -p
-  ``` 
+  ```  
 
 # How to contribute
   PLEASE FORK, and follow a proper git work flow
