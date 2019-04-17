@@ -47,15 +47,7 @@ sudo apt-get install npm --yes
 
   1. In one terminal, run this to get the server running (only need to do npm install on your first time, to install all the node_modules):
   ```bash
-  cd stockapptpp/backend
-  npm install   
-  npm start
-  ```
-  2. In a second terminal, run this to get the front end running (only need to do npm install on your first time, to install all the node_modules):
-  ```bash
-  cd stockapptpp/src
-  npm install
-  npm start
+  npm run dev
   ```
 
   3. Now go to your browser and open http://localhost:3000/
@@ -72,7 +64,7 @@ sudo apt-get install npm --yes
   * After you edit that file, run the following to load in the [sysctl](https://linux.die.net/man/8/sysctl) setting from /etc/sysctl.conf
   ```shell
   sudo sysctl -p
-  ``` 
+  ```  
 
 # How to contribute
   PLEASE FORK, and follow a proper git work flow
