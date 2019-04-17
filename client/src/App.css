@@ -8,6 +8,12 @@
   justify-content: center;
 }
 
+.leftAlign {
+  display: flex;
+  justify-content: left;
+}
+
+
 #footer {   
 position:fixed;
    left:0px;
@@ -17,27 +23,47 @@ position:fixed;
    background:#999;
 }
 
-.leftAlign {
-  display: flex;
-  justify-content: left;
+
+.portfolio .even {
+
+  /*background:#c2e4fa;
+  background:-moz-linear-gradient(top,#d9eefc,#c2e4fa);*/
+
+}
+.portfolio .odd {
+   float:right; 
+  /*background:#faf4c2;
+  background:-moz-linear-gradient(top,#fcf8d9,#faf4c2);*/
+
+}
+.portfolio .itemBoxLeft {
+  font-size:11px;
+  min-height: 80vh;
+  height:80vh;
+  width: 55%;
+  clear:both;
+  padding:5px;
+  margin:10px 10px 10px 10px;
+  display:inline-block;
+  position:relative;
+  border-radius:4px;
+  vertical-align: bottom;
 }
 
-.leftAlignSpec {
-
-  display: flex;
-  justify-content: left;
+.portfolio .itemBoxRight {
+  font-size:11px;
+  min-height: 80vh;
+  height:80vh;
+  width: 40%;
+  clear:both;
+  padding:5px;
+  margin:10px 10px 10px 10px;
+  display:inline-block;
+  position:relative;
+  border-radius:4px;
+  vertical-align: bottom;
 }
 
-.rightAlignSpec {
-
-  display: flex;
-  justify-content: right;
-}
-
-.parent {
-    
-    vertical-align: bottom;
-}
 
 
 .divBox {
@@ -55,12 +81,12 @@ position:fixed;
 
 background-color: lightgrey;
   box-sizing: border-box;
-  min-height: 80vh;
-  height:80vh;;
-  width: 40%;
+  min-height: 75vh;
+  height:50%;
+  width: 90%;
   border: 0px solid #2a2a2a;
   padding: 10px;
-  margin: 10px;
+   margin:auto;
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -69,12 +95,12 @@ background-color: lightgrey;
 .separateScreenLeft {
 background-color: lightgrey;
   box-sizing: border-box;
-  min-height: 80vh;
-  height:80vh;
-  width: 40%;
+  min-height: 75vh;
+  height:50%;
+  width: 90%;
   border: 0px solid #2a2a2a;
   padding: 10px;
-  margin: 10px;
+  margin:auto;
   background-size: cover;
   background-repeat: no-repeat;
 }

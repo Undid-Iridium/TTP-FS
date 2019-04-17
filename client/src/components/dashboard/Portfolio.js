@@ -38,15 +38,16 @@ class Portfolio extends Component {
     console.log(user);
     const { errors } = this.state;
     return (
-      <div className = "parent">
-        <div className="leftAlignSpec">
-          <div className="separateScreenLeft">
+    <div>
+        <div className='portfolio'>
+            <div className='itemBoxLeft even'>
+                <div className = "separateScreenLeft">
             <p className="Table-header">Basic Table</p>
             <Table1 data={data} />
           </div>
-        </div>
-  
-        <div className="rightAlignSpec">
+            </div>                    
+            <div className='itemBoxRight odd'>    
+                <div className="rightAlignSpec">
           <div className="separateScreenRight">
             {this.props.auth.isAuthenticated ? (
               <div className="centerAlign">
@@ -110,11 +111,16 @@ class Portfolio extends Component {
             </form>
           </div>
         </div>
+            </div>
+
+         </div>
+    
         <p id="footer">
           {" "}
           Data provided for free by IEX. View IEX’s Terms of Use.{" "}
         </p>
       </div>
+      
     );
   }
 }
