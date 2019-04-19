@@ -7,13 +7,15 @@ import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import Navbar from "./components/layout/Navbar";
+import NavbarTool from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
-
+import Portfolio from "./components/dashboard/Portfolio";
+import Transactions from "./components/dashboard/Transactions";
+import StockList from "./components/dashboard/StockList";
 import "./App.css";
 
 // Check for token to keep user logged in
@@ -41,12 +43,15 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="App">
-            <Navbar />
+            <NavbarTool/>
             <Route exact path="/" component={Landing} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/portfolio" component={Portfolio} />
+              <PrivateRoute exact path="/transactions" component={Transactions} />
+              <PrivateRoute exact path="/stockList" component={StockList} />
             </Switch>
           </div>
         </Router>
