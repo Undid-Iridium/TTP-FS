@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import "../../App.css";
+import mainLogo from "../../portfolio_background.jpg";
 import PropTypes from "prop-types";
 import Table1 from "../layout/Table";
 class Portfolio extends Component {
@@ -9,7 +10,7 @@ class Portfolio extends Component {
     super();
     this.state = {
       Ticker: "",
-      Quantity: 0,
+      Quantity: Number,
       size: 3,
       errors: {}
     };
@@ -38,11 +39,13 @@ class Portfolio extends Component {
     console.log(user);
     const { errors } = this.state;
     return (
-    <div>
+    <div style={ { backgroundImage: `url(mainLogo)` } }>
         <div className='portfolio'>
             <div className='itemBoxLeft even'>
                 <div className = "separateScreenLeft">
-            <p className="Table-header">Basic Table</p>
+                <p style={({ color: "#2d2d2d" }, { fontSize: 40 }, {textAlign:"center"})}>
+                    Basic Table
+                  </p>
             <Table1 data={data} />
           </div>
             </div>                    
@@ -54,7 +57,7 @@ class Portfolio extends Component {
                 <div className="divBox">
                   <p style={({ color: "#2d2d2d" }, { fontSize: 20 })}>
                     {" "}
-                    Account Balance: {user.balance}{" "}
+                    Account Balance: ${user.balance}{" "}
                   </p>
                 </div>
               </div>
@@ -95,6 +98,7 @@ class Portfolio extends Component {
                 </span>
               </div>
               <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+               <div className = "centerAlign">
                 <button
                   style={{
                     width: "150px",
@@ -103,10 +107,11 @@ class Portfolio extends Component {
                     marginTop: "1rem"
                   }}
                   type="submit"
-                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                  className="btn btn-large waves-effect waves-light hoverable blue accent-3 "
                 >
                   Buy
                 </button>
+              </div>
               </div>
             </form>
           </div>

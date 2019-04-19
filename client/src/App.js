@@ -15,6 +15,7 @@ import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
 import Portfolio from "./components/dashboard/Portfolio";
 import Transactions from "./components/dashboard/Transactions";
+import StockList from "./components/dashboard/StockList";
 import "./App.css";
 
 // Check for token to keep user logged in
@@ -50,6 +51,7 @@ class App extends Component {
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/portfolio" component={Portfolio} />
               <PrivateRoute exact path="/transactions" component={Transactions} />
+              <PrivateRoute exact path="/stockList" component={StockList} />
             </Switch>
           </div>
         </Router>

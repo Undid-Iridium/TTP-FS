@@ -62,6 +62,17 @@ class NavbarTool extends Component {
                         Transactions
                       </Link>
                     </li>
+                    <li className="nav-item">
+                      <Link
+                        to="/stockList"
+                        style={{
+                          fontFamily: "monospace"
+                        }}
+                        className="col s5   black-text"
+                      >
+                        StockList
+                      </Link>
+                    </li>
                   </ul>
                 </div>
                 <div className="rightAlign">
