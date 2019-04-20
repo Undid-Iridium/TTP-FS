@@ -6,8 +6,14 @@ import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
-  axios
-    .post("/api/users/register", userData)
+fetch("http://localhost:5000/api/users/register",{
+    method : 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userData)
+    }).then(res => res.json())
     .then(res => history.push("/login"))
     .catch(err =>
       dispatch({
@@ -17,15 +23,21 @@ export const registerUser = (userData, history) => dispatch => {
     );
 };
 
-// Login - get user token
+// Login - get user token AXIOS SUCKS   axios .post("/api/users/login", userData) (Randomly decided to stop posting data).
 export const loginUser = userData => dispatch => {
-  axios
-    .post("/api/users/login", userData)
+  console.log("AUTH ACTIONS"  + userData);
+  fetch("http://localhost:5000/api/users/login",{
+    method : 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userData)
+    }).then(res => res.json())
     .then(res => {
       // Save to localStorage
-
       // Set token to localStorage
-      const { token } = res.data;
+      const { token } = res;
       localStorage.setItem("jwtToken", token);
       // Set token to Auth header
       setAuthToken(token);
@@ -34,12 +46,13 @@ export const loginUser = userData => dispatch => {
       // Set current user
       dispatch(setCurrentUser(decoded));
     })
-    .catch(err =>
+    .catch(function(err) {
       dispatch({
         type: GET_ERRORS,
-        payload: err.response.data
+        payload: err.response
       })
-    );
+    });
+    
 };
 
 // Set logged in user

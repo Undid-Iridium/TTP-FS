@@ -5,6 +5,21 @@ import "../../App.css";
 import mainLogo from "../../portfolio_background.jpg";
 import PropTypes from "prop-types";
 import Table1 from "../layout/Table";
+
+function findElement(arr, propName, propValue) {
+  for (var i=0; i < arr.length; i++)
+    if (arr[i][propName] == propValue)
+      return arr[i];
+
+  // will return undefined if not found; you could return a default instead
+}
+
+
+var data = [
+      { text: "AAA", value: 1, valuetotal: "0" },
+      { text: "BBB", value: 2, valuetotal: "1" },
+      { text: "CCC", value: 3, valuetotal: "2" }
+    ];
 class Portfolio extends Component {
   constructor() {
     super();
@@ -21,20 +36,24 @@ class Portfolio extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
-
+    var totalP = (findElement(data, "text", this.state.Ticker).value) * this.state.Quantity;
+    console.log("totalP :   " + totalP);
     const stockPurchase = {
       Ticker: this.state.Ticker,
-      Quantity: this.state.Quantity
+      Quantity: this.state.Quantity,
+      Value: totalP
     };
+    
+
   };
+  
+  validateForm() {
+      return this.state.Quantity > 0 && this.state.Ticker.length > 0;
+  }
 
   render() {
     //https://codesandbox.io/s/2omrn3oq30 https://www.npmjs.com/package/react-table
-    var data = [
-      { text: "AAA", value: 1, valuetotal: "20" },
-      { text: "BBB", value: 2, valuetotal: "53" },
-      { text: "CCC", value: 3, valuetotal: "42" }
-    ];
+    
     const { user } = this.props.auth;
     console.log(user);
     const { errors } = this.state;
@@ -108,6 +127,7 @@ class Portfolio extends Component {
                   }}
                   type="submit"
                   className="btn btn-large waves-effect waves-light hoverable blue accent-3 "
+                   disabled={!this.validateForm()}
                 >
                   Buy
                 </button>
