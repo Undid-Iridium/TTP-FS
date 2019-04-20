@@ -47,7 +47,9 @@ sudo apt-get install npm --yes
 
   1. In one terminal, run this to get the server running (only need to do npm install on your first time, to install all the node_modules):
   ```bash
+
   npm run dev
+
   ```
 
   3. Now go to your browser and open http://localhost:3000/
