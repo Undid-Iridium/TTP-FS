@@ -23,10 +23,10 @@ export default class StockList extends Component {
         });
         //console.log(first + " f, s " + second);
       });
+      
+  }
 
-   }
-
-   render() {
+  render() {
     //console.log(this.state.stocks);
     return (
       <div>
@@ -42,8 +42,8 @@ export default class StockList extends Component {
               })}
             </tbody>
           </table>
-
-           <table className="tableRight table_on_the_right">
+          
+          <table className="tableRight table_on_the_right">
             <tbody>
               {this.state.stocksSecondHalf.map(function(item, key) {
                 return (
@@ -56,10 +56,9 @@ export default class StockList extends Component {
             </tbody>
           </table>
 
-           {/*<p>Welcome to StockList Component!!</p>
+          {/*<p>Welcome to StockList Component!!</p>
         <div><pre>{JSON.stringify(this.state.stocks, null, 2) }</pre></div>;*/}
         </div>
     );
   }
 }
-

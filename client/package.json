@@ -23,8 +23,9 @@
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:5000",
-   "proxy": "http://api.iextrading.com",
+  "proxy": "http://api.iextrading.com",
   "proxy": "https://api.iextrading.com/1.0/ref-data/symbols",
+
   "eslintConfig": {
     "extends": "react-app"
   },

@@ -62,7 +62,7 @@ class NavbarTool extends Component {
                         Transactions
                       </Link>
                     </li>
-                        <li className="nav-item">
+                    <li className="nav-item">
                       <Link
                         to="/stockList"
                         style={{
@@ -74,7 +74,6 @@ class NavbarTool extends Component {
                       </Link>
                     </li>
                   </ul>
-                  
                 </div>
                 <div className="rightAlign">
                   <button
