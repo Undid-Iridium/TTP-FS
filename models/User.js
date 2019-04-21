@@ -19,7 +19,11 @@ const UserSchema = new Schema({
     type: Number,
     required: true
   },
-  Transactions: {
+  stocks: {
+    type: Array,
+    required: true
+  },
+  transactions: {
     type: Array,
     required: true
   },

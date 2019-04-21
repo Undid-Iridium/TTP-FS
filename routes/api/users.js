@@ -34,6 +34,7 @@ router.post("/register", (req, res) => {
         email: req.body.email,
         password: req.body.password,
         balance: 5000,
+        stocks: [],
         transactions : []
       });
 

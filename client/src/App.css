@@ -1,132 +1,135 @@
 .rightAlign {
-  display: flex;
-  justify-content: right;
+	display: flex;
+	justify-content: right;
 }
 
-.centerAlign{
-  display: flex;
-  justify-content: center;
+.centerAlign {
+	display: flex;
+	justify-content: center;
 }
 
 .leftAlign {
-  display: flex;
-  justify-content: left;
+	display: flex;
+	justify-content: left;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-#footer {   
-position:fixed;
-   left:0px;
-   bottom:0px;
-   height:30px;
-   width:100%;
-   background:#999;
+#footer {
+	position: fixed;
+	left: 0px;
+	bottom: 0px;
+	height: 30px;
+	width: 100%;
+	background: #999;
 }
-
 
 .portfolio .even {
-
-  /*background:#c2e4fa;
+	/*background:#c2e4fa;
   background:-moz-linear-gradient(top,#d9eefc,#c2e4fa);*/
-
 }
+
 .portfolio .odd {
-   float:right; 
-  /*background:#faf4c2;
+	float: right;
+	/*background:#faf4c2;
   background:-moz-linear-gradient(top,#fcf8d9,#faf4c2);*/
-
 }
+
 .portfolio .itemBoxLeft {
-  font-size:11px;
-  min-height: 80vh;
-  height:80vh;
-  width: 55%;
-  clear:both;
-  padding:5px;
-  margin:10px 10px 10px 10px;
-  display:inline-block;
-  position:relative;
-  border-radius:4px;
-  vertical-align: bottom;
+	min-height: 80vh;
+	height: 80vh;
+	width: 55%;
+	clear: both;
+	padding: 5px;
+	margin: 10px 10px 10px 10px;
+	display: inline-block;
+	position: relative;
+	border-radius: 4px;
+	vertical-align: bottom;
 }
 
 .portfolio .itemBoxRight {
-  font-size:11px;
-  min-height: 70vh;
-  height:70vh;
-  width: 40%;
-  clear:both;
-  padding:5px;
-  margin:10px 10px 10px 10px;
-  display:inline-block;
-  position:relative;
-  border-radius:4px;
-  vertical-align: bottom;
+	font-size: 11px;
+	min-height: 70vh;
+	height: 70vh;
+	width: 40%;
+	clear: both;
+	padding: 5px;
+	margin: 10px 10px 10px 10px;
+	display: inline-block;
+	position: relative;
+	border-radius: 4px;
+	vertical-align: bottom;
 }
 
-
-
 .divBox {
-  text-align: center;
-  background-color: #e7f2e1;
-  width: 250px;
-  border: 0px solid #035E7B;
-  padding: 5px;
-  margin: 5px;
-  margin-top: 15%; /*set to a negative number 1/2 of your height*/
-  left: 50%;
+	text-align: center;
+	//background-color: #e7f2e1;
+	width: 250px;
+	border: 0px solid #035E7B;
+	padding: 5px;
+	margin: 5px;
+	margin-top: 15%;
+	/*set to a negative number 1/2 of your height*/
+	left: 50%;
 }
 
 html {
-    font-family: sans-serif;
-    -ms-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%
+	font-family: sans-serif;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%
 }
+
 .separateScreenRight {
-
-background-color: lightgrey;
-  box-sizing: border-box;
-  min-height: 75vh;
-  height:50%;
-  width: 90%;
-  border: 0px solid #2a2a2a;
-  padding: 10px;
-   margin:auto;
-  background-size: cover;
-  background-repeat: no-repeat;
+	//background-color: lightgrey;
+	box-sizing: border-box;
+	min-height: 75vh;
+	height: 50%;
+	width: 90%;
+	border: 0px solid #2a2a2a;
+	padding: 10px;
+	margin: auto;
+	background-size: cover;
+	background-repeat: no-repeat;
 }
-
 
 .separateScreenLeft {
-background-color: lightgrey;
-  box-sizing: border-box;
-  min-height: 75vh;
-  height:50%;
-  width: 90%;
-  border: 0px solid #2a2a2a;
-  padding: 10px;
-  margin:auto;
-  background-size: cover;
-  background-repeat: no-repeat;
+	//background-color: lightgrey;
+	box-sizing: border-box;
+	min-height: 75vh;
+	height: 50%;
+	width: 90%;
+	border: 0px solid #2a2a2a;
+	padding: 40px;
+	margin: auto;
+	background-size: cover;
+	background-repeat: no-repeat;
 }
 
+.childFont {
+    //color: "#FFFFFF";
+	font-size: 40px;
+}
 
 .tableLeft {
-    width: 50%;
+	width: 50%;
 }
+
 .tableRight {
-    
-    width: 50%
+	width: 50%
 }
-table.table_on_the_left, table.table_on_the_right {
-  float: left;
-  display:inline-block;
-  position:relative;
-  border-radius:4px;
-  vertical-align: bottom;
-   }
+
+table.table_on_the_left,
+table.table_on_the_right {
+	float: left;
+	display: inline-block;
+	position: relative;
+	border-radius: 4px;
+	vertical-align: bottom;
+}
+.clr{clear:both}
+
 
 
