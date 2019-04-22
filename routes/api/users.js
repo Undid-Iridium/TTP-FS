@@ -17,17 +17,20 @@ const User = require("../../models/User");
 // @access Public
 router.post("/register", (req, res) => {
   // Form validation
-
+  console.log("what");
   const { errors, isValid } = validateRegisterInput(req.body);
 
   // Check validation
   if (!isValid) {
     return res.status(400).json(errors);
   }
-
+  console.log("nani");
   User.findOne({ email: req.body.email }).then(user => {
+    console.log(user);
     if (user) {
-      return res.status(400).json({ email: "Email already exists" });
+
+      return res.status(400).json({ error: "Email already exists" });
+
     } else {
       const newUser = new User({
         name: req.body.name,

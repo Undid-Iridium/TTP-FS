@@ -6,34 +6,48 @@ import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
-fetch("http://localhost:5000/api/users/register",{
-    method : 'POST',
+  fetch("http://localhost:5000/api/users/register", {
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      Accept: "application/json",
+      "Content-Type": "application/json"
     },
     body: JSON.stringify(userData)
-    }).then(res => res.json())
-    .then(res => history.push("/login"))
-    .catch(err =>
+  })
+    .then(res => res.json())
+    .then(function(res) {
+      if (res.error === undefined) {
+        history.push("/login");
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: res.error
+        });
+        console.log(res.error);
+        alert("Email already exists Dude");
+      }
+    })
+    .catch(function(err) {
       dispatch({
         type: GET_ERRORS,
-        payload: err.response.data
-      })
-    );
+        payload: err.response
+      });
+      console.log(err.response);
+      alert("Email already exists Dude");
+    });
 };
 
 // Login - get user token AXIOS SUCKS   axios .post("/api/users/login", userData) (Randomly decided to stop posting data).
 export const loginUser = userData => dispatch => {
-  console.log("AUTH ACTIONS"  + userData);
-  fetch("http://localhost:5000/api/users/login",{
-    method : 'POST',
+  fetch("http://localhost:5000/api/users/login", {
+    method: "POST",
     headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      Accept: "application/json",
+      "Content-Type": "application/json"
     },
     body: JSON.stringify(userData)
-    }).then(res => res.json())
+  })
+    .then(res => res.json())
     .then(res => {
       // Save to localStorage
       // Set token to localStorage
@@ -50,9 +64,8 @@ export const loginUser = userData => dispatch => {
       dispatch({
         type: GET_ERRORS,
         payload: err.response
-      })
+      });
     });
-    
 };
 
 // Set logged in user
@@ -79,3 +92,4 @@ export const logoutUser = () => dispatch => {
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
 };
+
