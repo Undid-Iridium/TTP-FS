@@ -2,7 +2,7 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING, UPDATE_USER } from "./types";
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
@@ -58,6 +58,7 @@ export const loginUser = userData => dispatch => {
       setAuthToken(token);
       // Decode token to get user data
       const decoded = jwt_decode(token);
+      localStorage.setItem("balance", decoded.balance);
       // Set current user
       dispatch(setCurrentUser(decoded));
       console.log("after dispatch");
@@ -70,22 +71,38 @@ export const loginUser = userData => dispatch => {
     });
 };
 //Override set log in jwt_decode(token)
-export const overrideCurrentUser = userData => dispatch   => {
+export const overrideCurrentUser = userData => dispatch => {
+    console.log("here");
+    
+    dispatch(overwriteLogin(userData));
+};
+
+
+//Overwrite logged in user
+export const overwriteLogin = decoded => {
+  console.log(decoded);
+  decoded.user.balance = 20;
+  console.log(UPDATE_USER);
+  console.log("ay");
   
-}
+  return {
+    type: UPDATE_USER,
+    payload: decoded.user
+  };
+};
+
 
 // Set logged in user
 export const setCurrentUser = decoded => {
   console.log(decoded);
   console.log(SET_CURRENT_USER);
   console.log("ay");
+  
   return {
     type: SET_CURRENT_USER,
     payload: decoded
   };
 };
-
-
 
 // User loading
 export const setUserLoading = () => {
@@ -98,7 +115,7 @@ export const setUserLoading = () => {
 export const logoutUser = () => dispatch => {
   // Remove token from local storage
   localStorage.removeItem("jwtToken");
-  localStorage.removeItem('balance');
+  localStorage.removeItem("balance");
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false

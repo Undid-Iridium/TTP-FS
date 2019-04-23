@@ -73,6 +73,21 @@ router.post("/updateStock", (req, res) => {
       return res.status(404).json({ error: "Could not update" });
     }
     user.balance -= req.body.cost;
+    if(req.body.stock){
+        var inStocks = false;
+        for(var i = 0; i < user.stocks.length; i++)
+        {
+          if(user.stocks[i].Ticker == req.body.stock.Ticker)
+          {
+            user.stocks[i].Amount =  parseInt(user.stocks[i].Amount, 10) + parseInt(req.body.stock.Amount, 10);
+            inStocks = true;
+            break;
+          }
+        }
+        if(!inStocks){
+            user.stocks.push(req.body.stock);
+        }
+    }
     User.updateOne(details, user, (err, result) => {
       if (err) {
         console.log(err);
