@@ -5,6 +5,27 @@ import "../../App.css";
 import mainLogo from "../../interlaced.png";
 import PropTypes from "prop-types";
 import Table1 from "../layout/Table";
+import { overrideCurrentUser } from "../../actions/authActions";
+const updateUser = async userData => {
+  console.log(userData);
+  var result = await fetch("http://localhost:5000/api/users/updateStock", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(userData)
+  })
+    .then(res => res.json())
+    .then(res => {
+      return res;
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  console.log("wait..", result);
+  return result;
+};
 
 function findElement(arr, propName, propValue) {
   for (var i = 0; i < arr.length; i++)
@@ -13,8 +34,13 @@ function findElement(arr, propName, propValue) {
   // will return undefined if not found; you could return a default instead   backgroundSize: 'cover',
 }
 
-function isInt(n){
-    return n % 1 === 0;
+ const updateAll = (dataV) => () => {
+    overrideCurrentUser(dataV);
+  }
+  
+  
+function isInt(n) {
+  return n % 1 === 0;
 }
 
 function typeOf(obj) {
@@ -42,34 +68,60 @@ class Portfolio extends Component {
       Total: 0,
       size: 3,
       errors: {},
-      data: []
+      data: [],
+      balance: 0
     };
   }
-  async componentDidMount() { 
+  async componentDidMount() {
     //const data = await  axios.get('https://api.iextrading.com/1.0/ref-data/symbols').then(function (response) { console.log(response); return response;}).catch(error => console.log(error));
     const { user } = this.props.auth;
     var stockObj = [];
-    
-    for (var item of user.stocks) {
-        
-         var symbol = item.Ticker;
-         var link = "https://api.iextrading.com/1.0/stock/" + symbol + "/price";
-         fetch(link)
-         .then(objOri => objOri.json())
-         .then(objData => {
-           var itemValue = (item.Amount <= 0 ? 1 : item.Amount) ;
-           itemValue *= objData;
-           stockObj.push( { Ticker : symbol, Amount : item.Amount, Total : itemValue});
-            
-           this.setState({ data : stockObj, Total : this.state.Total + itemValue});
-         })
-         .catch(err => {
-            console.log(err);
-         });
+    if(!localStorage.balance){
+        localStorage.setItem('balance', user.balance);
     }
-    
    
+    for (var item of user.stocks) {
+      var symbol = item.Ticker;
+      var link = "https://api.iextrading.com/1.0/stock/" + symbol + "/price";
+      fetch(link)
+        .then(objOri => objOri.json())
+        .then(objData => {
+          var itemValue = item.Amount <= 0 ? 1 : item.Amount;
+          itemValue *= objData;
+          stockObj.push({
+            Ticker: symbol,
+            Amount: item.Amount,
+            Total: itemValue
+          });
+
+          this.setState({
+            data: stockObj,
+            Total: this.state.Total + itemValue
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+    if(localStorage.balance){
+         this.setState({ balance: localStorage.balance }); 
+    }
+    else{
+        localStorage.setItem('balance', user.balance);
+    }
+
     //console.log("AAA" , stockObj);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(this.props.balance, nextProps.balance);
+    if (this.props.balance !== nextProps.balance ) {
+      if(this.props.balance > this.props.auth.user.balance){
+        //Post request to check correct number, at that rate might as well always do post request. 
+        localStorage.setItem('balance', this.props.auth.user.balance);
+      }
+      this.setState({ balance: localStorage.balance});
+    }
   }
 
   onChange = e => {
@@ -77,30 +129,59 @@ class Portfolio extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
+    const { user } = this.props.auth;
     console.log(this.state.data);
-    var totalP = 
-    findElement(this.state.data, "Ticker", this.state.Ticker).Total;
-    
- 
-    console.log("totalP :   " + totalP);
+    //var totalP =
+    //findElement(this.state.data, "Ticker", this.state.Ticker).Total;
+
+    //console.log("totalP :   " + totalP);
     const stockPurchase = {
       Ticker: this.state.Ticker,
       Quantity: this.state.Quantity,
-      Value: totalP
+      Value: 0
     };
     var symbol = this.state.Ticker;
+    console.log(symbol);
     var link = "https://api.iextrading.com/1.0/stock/" + symbol + "/price";
     fetch(link)
-         .then(objOri => objOri.json())
-         .then(objData => {
-              return true;
-         }).catch(err => { return false;});
+      .then(objOri => objOri.json())
+      .then(objData => {
+        if (objData * stockPurchase.Quantity > user.balance) {
+          alert("You do not have sufficient funds");
+        } else {
+          stockPurchase.value = objData * stockPurchase.Quantity;
+          const userData = {
+            id: user.id,
+            cost: stockPurchase.value
+          };
+          var newData;
+          updateUser(userData).then(result => {
+
+            this.setState({ balance: result.balance });
+            localStorage.balance = result.balance;
+        
+          });
+          
+          //user.balance - stockPurchase.value
+          alert(
+            `Congrats, you purchased ${stockPurchase.Quantity} ${
+              stockPurchase.Ticker
+            }`
+          );
+        }
+      })
+      .catch(err => {
+        alert("Incorrect Ticker/Symbol");
+      });
     console.log("Stock Purchase", stockPurchase);
   };
 
-   validateForm() {
+  validateForm() {
     var confirm = false;
-    confirm = (this.state.Quantity > 0 && this.state.Ticker.length > 0)  && isInt(this.state.Quantity);
+    confirm =
+      this.state.Quantity > 0 &&
+      this.state.Ticker.length > 0 &&
+      isInt(this.state.Quantity);
     confirm = isInt(this.state.Quantity);
 
     return confirm;
@@ -133,7 +214,7 @@ class Portfolio extends Component {
                     <div className="divBox">
                       <p style={({ color: "#2d2d2d" }, { fontSize: 20 })}>
                         {" "}
-                        Account Balance: ${user.balance}{" "}
+                        Account Balance: ${this.state.balance}{" "}
                       </p>
                     </div>
                   </div>
@@ -197,7 +278,8 @@ class Portfolio extends Component {
 
         <p id="footer">
           {" "}
-          Data provided for free by IEX. View IEX’s Terms of <a href="https://iextrading.com/api-terms/"> Use</a>.{" "}
+          Data provided for free by IEX. View IEX’s Terms of{" "}
+          <a href="https://iextrading.com/api-terms/"> Use</a>.{" "}
         </p>
         <div className="clr" />
       </div>
@@ -205,13 +287,27 @@ class Portfolio extends Component {
   }
 }
 
+
+
+
+Portfolio.propTypes = {
+  overrideCurrentUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired
+};
+
 const mapStateToProps = state => ({
+  user : state.auth.user,
   auth: state.auth,
   errors: state.errors
 });
 
-export default connect(mapStateToProps)(Portfolio);
 
+export default connect(
+  mapStateToProps,
+  { overrideCurrentUser }
+)(Portfolio);
 //https://api.iextrading.com/1.0/stock/aapl/chart
 //https://iextrading.com/developer/docs/#chart
 //https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=1

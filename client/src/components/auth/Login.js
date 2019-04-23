@@ -45,7 +45,7 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password
     };
-    
+
     this.props.loginUser(userData);
   };
 
@@ -140,3 +140,4 @@ export default connect(
   mapStateToProps,
   { loginUser }
 )(Login);
+

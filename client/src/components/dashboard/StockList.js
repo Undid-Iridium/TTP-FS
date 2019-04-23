@@ -23,42 +23,41 @@ export default class StockList extends Component {
         });
         //console.log(first + " f, s " + second);
       });
-      
   }
 
   render() {
     //console.log(this.state.stocks);
     return (
       <div>
-          <table className = "tableLeft table_on_the_left">
-            <tbody>
-              {this.state.stocksFirstHalf.map(function(item, key) {
-                return (
-                  <tr key={key}>
-                    <td>{item.symbol}</td>
-                    <td>{item.name}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          
-          <table className="tableRight table_on_the_right">
-            <tbody>
-              {this.state.stocksSecondHalf.map(function(item, key) {
-                return (
-                  <tr key={key}>
-                    <td>{item.symbol}</td>
-                    <td>{item.name}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <table className="tableLeft table_on_the_left">
+          <tbody>
+            {this.state.stocksFirstHalf.map(function(item, key) {
+              return (
+                <tr key={key}>
+                  <td>{item.symbol}</td>
+                  <td>{item.name}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
-          {/*<p>Welcome to StockList Component!!</p>
+        <table className="tableRight table_on_the_right">
+          <tbody>
+            {this.state.stocksSecondHalf.map(function(item, key) {
+              return (
+                <tr key={key}>
+                  <td>{item.symbol}</td>
+                  <td>{item.name}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        {/*<p>Welcome to StockList Component!!</p>
         <div><pre>{JSON.stringify(this.state.stocks, null, 2) }</pre></div>;*/}
-        </div>
+      </div>
     );
   }
 }

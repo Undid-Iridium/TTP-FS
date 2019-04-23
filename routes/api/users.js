@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport");
+var ObjectID = require("mongodb").ObjectID;
 
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
@@ -17,20 +18,17 @@ const User = require("../../models/User");
 // @access Public
 router.post("/register", (req, res) => {
   // Form validation
-  console.log("what");
+
   const { errors, isValid } = validateRegisterInput(req.body);
 
   // Check validation
   if (!isValid) {
     return res.status(400).json(errors);
   }
-  console.log("nani");
   User.findOne({ email: req.body.email }).then(user => {
     console.log(user);
     if (user) {
-
       return res.status(400).json({ error: "Email already exists" });
-
     } else {
       const newUser = new User({
         name: req.body.name,
@@ -38,7 +36,7 @@ router.post("/register", (req, res) => {
         password: req.body.password,
         balance: 5000,
         stocks: [],
-        transactions : []
+        transactions: []
       });
 
       // Hash password before saving in database
@@ -59,16 +57,44 @@ router.post("/register", (req, res) => {
 // @route POST api/users/login
 // @desc Login user and return JWT token
 // @access Public
+router.use("/updateStock", function(req, res, next) {
 
-router.use('/login',function(req, res, next){
-   console.log("Got this far");
-   console.log(req.body);
-   next();
+  next();
+});
+
+router.post("/updateStock", (req, res) => {
+  const id = req.body.id;
+  const details = { _id: new ObjectID(id) };
+
+  // Find user by email
+  User.findOne(details).then(user => {
+
+    if (!user) {
+      return res.status(404).json({ error: "Could not update" });
+    }
+    user.balance -= req.body.cost;
+    User.updateOne(details, user, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("yay we got here");
+        return res
+          .status(200)
+          .json({ response: "Success", balance: user.balance });
+      }
+    });
+  });
+});
+
+router.use("/login", function(req, res, next) {
+  console.log("Got this far");
+  console.log(req.body);
+  next();
 });
 
 router.post("/login", (req, res) => {
   // Form validation
- 
+
   const { errors, isValid } = validateLoginInput(req.body);
 
   // Check validation
@@ -124,3 +150,4 @@ router.post("/login", (req, res) => {
 });
 
 module.exports = router;
+

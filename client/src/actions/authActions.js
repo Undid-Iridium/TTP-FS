@@ -51,6 +51,7 @@ export const loginUser = userData => dispatch => {
     .then(res => {
       // Save to localStorage
       // Set token to localStorage
+
       const { token } = res;
       localStorage.setItem("jwtToken", token);
       // Set token to Auth header
@@ -59,6 +60,7 @@ export const loginUser = userData => dispatch => {
       const decoded = jwt_decode(token);
       // Set current user
       dispatch(setCurrentUser(decoded));
+      console.log("after dispatch");
     })
     .catch(function(err) {
       dispatch({
@@ -67,14 +69,23 @@ export const loginUser = userData => dispatch => {
       });
     });
 };
+//Override set log in jwt_decode(token)
+export const overrideCurrentUser = userData => dispatch   => {
+  
+}
 
 // Set logged in user
 export const setCurrentUser = decoded => {
+  console.log(decoded);
+  console.log(SET_CURRENT_USER);
+  console.log("ay");
   return {
     type: SET_CURRENT_USER,
     payload: decoded
   };
 };
+
+
 
 // User loading
 export const setUserLoading = () => {
@@ -87,6 +98,7 @@ export const setUserLoading = () => {
 export const logoutUser = () => dispatch => {
   // Remove token from local storage
   localStorage.removeItem("jwtToken");
+  localStorage.removeItem('balance');
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false
