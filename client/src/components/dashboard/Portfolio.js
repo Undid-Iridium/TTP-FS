@@ -13,31 +13,63 @@ function findElement(arr, propName, propValue) {
   // will return undefined if not found; you could return a default instead   backgroundSize: 'cover',
 }
 
+function isInt(n){
+    return n % 1 === 0;
+}
+
+function typeOf(obj) {
+  return {}.toString
+    .call(obj)
+    .split(" ")[1]
+    .slice(0, -1)
+    .toLowerCase();
+}
+
 const divStyle = {
-  width: '100%',
-  height: '800px',
+  width: "100%",
+  height: "100vh",
   backgroundImage: `url(${mainLogo})`,
-  
-  backgroundrepeat: 'repeat'
+
+  backgroundrepeat: "repeat"
 };
 
-
-
-var data = [
-  { text: "AAA", value: 1, valuetotal: "0" },
-  { text: "BBB", value: 2, valuetotal: "1" },
-  { text: "CCC", value: 3, valuetotal: "2" }
-];
 class Portfolio extends Component {
   constructor() {
     super();
     this.state = {
       Ticker: "",
       Quantity: Number,
-      Total : 0,
+      Total: 0,
       size: 3,
-      errors: {}
+      errors: {},
+      data: []
     };
+  }
+  async componentDidMount() { 
+    //const data = await  axios.get('https://api.iextrading.com/1.0/ref-data/symbols').then(function (response) { console.log(response); return response;}).catch(error => console.log(error));
+    const { user } = this.props.auth;
+    var stockObj = [];
+    
+    for (var item of user.stocks) {
+        
+         var symbol = item.Ticker;
+         var link = "https://api.iextrading.com/1.0/stock/" + symbol + "/price";
+         fetch(link)
+         .then(objOri => objOri.json())
+         .then(objData => {
+           var itemValue = (item.Amount <= 0 ? 1 : item.Amount) ;
+           itemValue *= objData;
+           stockObj.push( { Ticker : symbol, Amount : item.Amount, Total : itemValue});
+            
+           this.setState({ data : stockObj, Total : this.state.Total + itemValue});
+         })
+         .catch(err => {
+            console.log(err);
+         });
+    }
+    
+   
+    //console.log("AAA" , stockObj);
   }
 
   onChange = e => {
@@ -45,46 +77,52 @@ class Portfolio extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
-    var totalP =
-      findElement(data, "text", this.state.Ticker).value * this.state.Quantity;
+    console.log(this.state.data);
+    var totalP = 
+    findElement(this.state.data, "Ticker", this.state.Ticker).Total;
+    
+ 
     console.log("totalP :   " + totalP);
     const stockPurchase = {
       Ticker: this.state.Ticker,
       Quantity: this.state.Quantity,
       Value: totalP
     };
+    var symbol = this.state.Ticker;
+    var link = "https://api.iextrading.com/1.0/stock/" + symbol + "/price";
+    fetch(link)
+         .then(objOri => objOri.json())
+         .then(objData => {
+              return true;
+         }).catch(err => { return false;});
     console.log("Stock Purchase", stockPurchase);
   };
 
-  validateForm() {
-    return this.state.Quantity > 0 && this.state.Ticker.length > 0;
+   validateForm() {
+    var confirm = false;
+    confirm = (this.state.Quantity > 0 && this.state.Ticker.length > 0)  && isInt(this.state.Quantity);
+    confirm = isInt(this.state.Quantity);
+
+    return confirm;
   }
 
   render() {
     //https://codesandbox.io/s/2omrn3oq30 https://www.npmjs.com/package/react-table
 
     const { user } = this.props.auth;
-    //console.log(user);
+    //console.log(this.state.data);
     const { errors } = this.state;
     return (
-    
-      <div style = {divStyle}>
-      
+      <div style={divStyle}>
         <div className="portfolio">
           <div className="itemBoxLeft even">
             <div className="separateScreenLeft">
-             <div className = "childFont">
-              <p
-                style={
-                  (
-                 
-                  { textAlign: "left" })
-                }
-              >
-                Portfolio: (${this.state.Total}){" "}
-              </p>
+              <div className="childFont">
+                <p style={{ textAlign: "left" }}>
+                  Portfolio: (${this.state.Total}){" "}
+                </p>
               </div>
-              <Table1 data={data} />
+              <Table1 data={this.state.data} />
             </div>
           </div>
           <div className="itemBoxRight odd">
@@ -121,7 +159,6 @@ class Portfolio extends Component {
                   <div className="input-field col s12">
                     <input
                       onChange={this.onChange}
-                      value={this.state.Quantity}
                       error={errors.Quantity}
                       id="Quantity"
                       type="text"
@@ -160,9 +197,9 @@ class Portfolio extends Component {
 
         <p id="footer">
           {" "}
-          Data provided for free by IEX. View IEX’s Terms of Use.{" "}
+          Data provided for free by IEX. View IEX’s Terms of <a href="https://iextrading.com/api-terms/"> Use</a>.{" "}
         </p>
-        <div className="clr"></div> 
+        <div className="clr" />
       </div>
     );
   }

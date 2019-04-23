@@ -9,15 +9,15 @@ class Table1 extends Component {
   render() {
     return (
       <div>
-        <BootstrapTable data={this.props.data}>
-          <TableHeaderColumn isKey dataField='text'>
-            Ticker
+        <BootstrapTable data={this.props.data} >
+          <TableHeaderColumn isKey dataField='Ticker'  width={'35%'}>
+           
           </TableHeaderColumn>
-          <TableHeaderColumn dataField='value'>
-            Amount
+          <TableHeaderColumn dataField='Amount' width={'35%'}>
+         
           </TableHeaderColumn>
-          <TableHeaderColumn dataField='valuetotal'>
-            Total
+          <TableHeaderColumn dataField='Total' width={'35%'}>
+         
           </TableHeaderColumn>
         </BootstrapTable>
       </div>
