@@ -211,7 +211,7 @@ class Portfolio extends Component {
                 transactions: {
                   Ticker: stockPurchase.Ticker,
                   Amount: stockPurchase.Amount,
-                  Total: 0
+                  Price: objData
                 }
               };
          

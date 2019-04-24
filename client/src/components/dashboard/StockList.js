@@ -1,6 +1,24 @@
 import React, { Component } from "react";
 //import axios from "axios";
 import "../../App.css";
+import mainLogo from "../../stocklist.png";
+
+
+
+const divStyle = {
+  width: "100%",
+  minHeight: "100vh",
+  height: "234950px",
+  backgroundImage: `url(${mainLogo})`,
+  backgroundrepeat: "repeat",
+ 
+
+};
+
+
+
+
+
 export default class StockList extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +48,7 @@ export default class StockList extends Component {
   render() {
     //console.log(this.state.stocks);
     return (
-      <div>
+      <div style={divStyle}>
         <table className="tableLeft table_on_the_left">
           <tbody>
             {this.state.stocksFirstHalf.map(function(item, key) {

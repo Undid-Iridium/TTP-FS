@@ -115,11 +115,14 @@ html {
 
 .tableLeft {
 	width: 50%;
+	max-width: 50%;
 }
 
 .tableRight {
-	width: 50%
+	width: 50%;
+	max-width: 50%;
 }
+
 
 table.table_on_the_left,
 table.table_on_the_right {
@@ -130,12 +133,20 @@ table.table_on_the_right {
 	vertical-align: bottom;
 }
 
+.more-padding-on-right {
+  padding-right: 10px;
+}
+
+.less-padding-on-right {
+  padding-right: -100px;
+}
 
 table.table_on_the_left_trans,
 table.table_on_the_right_trans {
 	float: left;
 	display: inline-block;
-	width: 45%;
+	display: table;
+	width: 15%;
 	position: relative;
 	border-radius: 4px;
 	vertical-align: bottom;

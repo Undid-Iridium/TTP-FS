@@ -1,6 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "../../App.css";
+
+import mainLogo from "../../dashboard.png";
+
+const divStyle = {
+  width: "100%",
+  height: "100vh",
+
+  backgroundImage: `url(${mainLogo})`,
+  backgroundrepeat: "repeat",
+  backgroundsize: "100%",
+  position: "relative",
+  top: "-25px"
+};
+
+
 class Dashboard extends Component {
  
 
@@ -8,7 +23,7 @@ class Dashboard extends Component {
     const { user } = this.props.auth;
    
     return (
-      <div style={{ height: "75vh" }} className="container valign-wrapper">
+      <div style={divStyle} className="container valign-wrapper">
         <div className="row">
           <div className="landing-copy col s12 center-align">
             <h4>

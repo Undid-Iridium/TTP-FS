@@ -2,6 +2,20 @@ import React, { Component } from "react";
 import "../../App.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import mainLogo from "../../transaction.png";
+
+const divStyle = {
+  width: "100%",
+  height: "100vh",
+
+  backgroundImage: `url(${mainLogo})`,
+  backgroundrepeat: "repeat",
+  backgroundsize: "100%",
+  position: "relative",
+  top: "-25px"
+};
+
+
 
 class Transactions extends Component {
   constructor(props) {
@@ -23,41 +37,29 @@ class Transactions extends Component {
         { transactions: "EMPTY" },
       ];
     }
-    if(objData.length < 10){
-    console.log(objData);
+
         this.setState({
           loading: false,
           stocksFirstHalf: objData,
           stocksSecondHalf: []
         });
-    }
-    else{
-    console.log(objData);
-    const half = (objData.length / 2)  | 0;
-    console.log(half);
-    //console.log(half);
-    const first = objData.slice(0, half | 0);
-    const second = objData.slice(Math.ceil(half), objData.length);
-    console.log("FIRST, SECOND" , first, second);
-    this.setState({
-      loading: false,
-      stocksFirstHalf: first,
-      stocksSecondHalf: second
-    });
-    }
+
+    
   }
 
   render() {
     //console.log(this.state.stocks);
     return (
-      <div>
+      <div style={divStyle}>
+        <h3> Transactions: </h3>
         <table className="tableLeft table_on_the_left_trans">
           <tbody>
             {this.state.stocksFirstHalf.map(function(item, key) {
               return (
                 <tr key={key}>
-                  <td>BUY  ({item.Ticker}) -  </td>
-                  <td>{item.Amount.toString()} Shares</td>
+                  <td className = " less-padding-on-right ">BUY  ({item.Ticker})&emsp;-  </td>
+                  <td>{item.Amount} Shares</td>
+                  <td>@{item.Price} </td>
                 </tr>
               );
             })}
