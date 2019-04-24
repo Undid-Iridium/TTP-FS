@@ -76,7 +76,7 @@ class Portfolio extends Component {
     //const data = await  axios.get('https://api.iextrading.com/1.0/ref-data/symbols').then(function (response) { console.log(response); return response;}).catch(error => console.log(error));
     const { changeUser } = this.props.auth;
     var stockObj = [];
-    console.log(changeUser.stocks);
+  
     for (var item of changeUser.stocks) {
       var symbol = item.Ticker;
 
@@ -89,7 +89,7 @@ class Portfolio extends Component {
           stockObj.push({
             Ticker: symbol,
             Amount: item.Amount,
-            Total: itemValue
+            Total: parseInt(itemValue,10)
           });
           
          return itemValue;
@@ -98,10 +98,10 @@ class Portfolio extends Component {
           console.log(err);
         });
       this.setState({
-            Total: this.state.Total + currtotal
+            Total: parseInt(this.state.Total + currtotal, 10)
       });
     }
-    console.log(stockObj, "WHAT");
+ 
     this.setState({
             data: stockObj,
     });
@@ -128,7 +128,7 @@ class Portfolio extends Component {
   onSubmit = e => {
     e.preventDefault();
     const { changeUser } = this.props.auth;
-   
+    console.log(this.state.Quantity);
     const stockPurchase = {
       Ticker: this.state.Ticker,
       Amount: parseInt(this.state.Quantity, 10),
@@ -140,7 +140,8 @@ class Portfolio extends Component {
     fetch(link)
       .then(objOri => objOri.json())
       .then(objData => {
-        if (objData * stockPurchase.Quantity > changeUser.balance) {
+      
+        if ((objData * stockPurchase.Amount) > changeUser.balance) {
           alert("You do not have sufficient funds");
         } else {
           stockPurchase.value = objData * stockPurchase.Amount;
@@ -163,50 +164,49 @@ class Portfolio extends Component {
               var stateData = this.state.data;
               for (var i = 0; i < stateData.length; i++) {
                 if (stateData[i].Ticker == stockPurchase.Ticker) {
-                  console.log("pre total " , stateData[i].Amount, stockPurchase.Amount);
+                
                   var totalAmount =
                     parseInt(stateData[i].Amount, 10) +
                     parseInt(stockPurchase.Amount, 10);
-                  console.log("totalAMount" , totalAmount);
+               
                   var totalCost =
-                    parseInt(objData, 10) * parseInt(totalAmount, 10);
+                    objData* totalAmount;
 
                   stateData[i].Amount = totalAmount;
-                  stateData[i].Total = parseInt(totalCost,10) + parseInt(stockPurchase.Amount, 10) * parseInt(objData, 10) ;
+                  stateData[i].Total = parseInt(totalCost,10) ;
                   inStocks = true;
 
                   var balanceVar =  parseInt(this.state.Total,10) + parseInt(stockPurchase.Amount, 10) * parseInt(objData, 10);
-                  console.log("this.state.Total", this.state.Total);
-                  console.log("NEW TOTAL" , stateData[i].Total);
+              
                  
 
                   this.setState({
                     data: stateData,
                     Total: parseInt(balanceVar, 10)
                   });
-                  console.log(stateData);
+            
                  
                   changeUser.stocks = stateData;
                   
-                  console.log("FOUND IN STOCKS");
+                 
                   break;
                 }
               }
               if (!inStocks) {
-                console.log("NOT IN STOCKS");
+      
                 var itemValue = stockPurchase.Amount;
                
-                itemValue *= objData;
+                itemValue *= parseInt(objData, 10);
                 stockPurchase.Total = parseInt(itemValue, 10);
                 stateData.push(stockPurchase);
                 var balanceVar = this.state.Total;
-                balanceVar +=
-                  parseInt(stockPurchase.Amount, 10) * parseInt(objData, 10);
+                balanceVar =
+                   parseInt(this.state.Total,10) + parseInt(stockPurchase.Amount, 10) * parseInt(objData, 10);
                 this.setState({
                   data: stateData,
                   Total: parseInt(balanceVar, 10)
                 });
-                console.log("STATE DATA", stateData);
+        
                 changeUser.stocks = stateData;
                
               }
@@ -217,14 +217,14 @@ class Portfolio extends Component {
           alert(
             `Congrats, you purchased ${stockPurchase.Amount} ${
               stockPurchase.Ticker
-            }`
+            } Stock!`
           );
         }
       })
       .catch(err => {
         alert("Incorrect Ticker/Symbol");
       });
-    console.log("Stock Purchase", stockPurchase);
+    
   };
 
   validateForm() {
