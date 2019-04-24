@@ -3,7 +3,11 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 
-import { setCurrentUser, logoutUser, setChangeUser } from "./actions/authActions";
+import {
+  setCurrentUser,
+  logoutUser,
+  setChangeUser
+} from "./actions/authActions";
 
 import { Provider } from "react-redux";
 import store from "./store";
@@ -27,22 +31,20 @@ if (localStorage.jwtToken) {
   // Decode token and get user info and exp
   const decoded = jwt_decode(token);
   // Set user and isAuthenticated
-  
+
   const change = localStorage.state;
-  
-  if(change === undefined || change === null || change === "undefined"){
-     store.dispatch(setCurrentUser(decoded));
-  }
-  else {
-    try{
+
+  if (change === undefined || change === null || change === "undefined") {
     store.dispatch(setCurrentUser(decoded));
-   
-    store.dispatch(setChangeUser(JSON.parse(change)));
+  } else {
+    try {
+      store.dispatch(setCurrentUser(decoded));
+
+      store.dispatch(setChangeUser(JSON.parse(change)));
+    } catch (err) {
+      alert(err);
     }
-    catch(err){
-        alert(err);
-    }
-    }
+  }
   // Check for expired token
   const currentTime = Date.now() / 1000; // to get in milliseconds
   if (decoded.exp < currentTime) {
@@ -59,14 +61,18 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="App">
-            <NavbarTool/>
+            <NavbarTool />
             <Route exact path="/" component={Landing} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/portfolio" component={Portfolio} />
-              <PrivateRoute exact path="/transactions" component={Transactions} />
+              <PrivateRoute
+                exact
+                path="/transactions"
+                component={Transactions}
+              />
               <PrivateRoute exact path="/stockList" component={StockList} />
             </Switch>
           </div>
@@ -76,3 +82,4 @@ class App extends Component {
   }
 }
 export default App;
+

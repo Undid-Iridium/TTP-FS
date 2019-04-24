@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
 import Table1 from "../layout/Table";
 import { setChangeUser } from "../../actions/authActions";
 const updateUser = async userData => {
-
   var result = await fetch("http://localhost:5000/api/users/updateStock", {
     method: "POST",
     headers: {
@@ -27,27 +26,38 @@ const updateUser = async userData => {
   return result;
 };
 
-function findElement(arr, propName, propValue) {
+const updateTransactions = async userData => {
+  var result = await fetch(
+    "http://localhost:5000/api/users/updateTransaction",
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(userData)
+    }
+  )
+    .then(res => res.json())
+    .then(res => {
+      return res;
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+
+  return result;
+};
+
+/*function findElement(arr, propName, propValue) {
   for (var i = 0; i < arr.length; i++)
     if (arr[i][propName] == propValue) return arr[i];
 
   // will return undefined if not found; you could return a default instead   backgroundSize: 'cover',
-}
-
-const updateAll = dataV => () => {
-  setChangeUser(dataV);
-};
+}*/
 
 function isInt(n) {
   return n % 1 === 0;
-}
-
-function typeOf(obj) {
-  return {}.toString
-    .call(obj)
-    .split(" ")[1]
-    .slice(0, -1)
-    .toLowerCase();
 }
 
 const divStyle = {
@@ -76,7 +86,7 @@ class Portfolio extends Component {
     //const data = await  axios.get('https://api.iextrading.com/1.0/ref-data/symbols').then(function (response) { console.log(response); return response;}).catch(error => console.log(error));
     const { changeUser } = this.props.auth;
     var stockObj = [];
-  
+
     for (var item of changeUser.stocks) {
       var symbol = item.Ticker;
 
@@ -91,27 +101,25 @@ class Portfolio extends Component {
             Amount: item.Amount,
             Total: itemValue
           });
-          
-         return itemValue;
+
+          return itemValue;
         })
         .catch(err => {
           console.log(err);
         });
       this.setState({
-            Total:this.state.Total + currtotal
+        Total: this.state.Total + currtotal
       });
     }
- 
+
     this.setState({
-            data: stockObj,
+      data: stockObj
     });
     localStorage.setItem("balance", this.props.auth.changeUser.balance);
     this.setState({ balance: this.props.auth.changeUser.balance });
-
   }
 
   componentWillReceiveProps(nextProps) {
-  
     if (this.props.balance !== nextProps.balance) {
       if (this.props.balance > this.props.auth.changeUser.balance) {
         //Post request to check correct number, at that rate might as well always do post request.
@@ -119,7 +127,6 @@ class Portfolio extends Component {
       }
       //this.setState({ balance: localStorage.balance });
     }
-  
   }
 
   onChange = e => {
@@ -135,13 +142,12 @@ class Portfolio extends Component {
       Total: 0
     };
     var symbol = this.state.Ticker;
-  
+
     var link = "https://api.iextrading.com/1.0/stock/" + symbol + "/price";
     fetch(link)
       .then(objOri => objOri.json())
       .then(objData => {
-      
-        if ((objData * stockPurchase.Amount) > changeUser.balance) {
+        if (objData * stockPurchase.Amount > changeUser.balance) {
           alert("You do not have sufficient funds");
         } else {
           stockPurchase.value = objData * stockPurchase.Amount;
@@ -151,10 +157,10 @@ class Portfolio extends Component {
             stock: {
               Ticker: stockPurchase.Ticker,
               Amount: stockPurchase.Amount,
-              Total : 0
+              Total: 0
             }
           };
-          var newData;
+
           updateUser(userData)
             .then(result => {
               this.setState({ balance: result.balance });
@@ -163,53 +169,55 @@ class Portfolio extends Component {
               var inStocks = false;
               var stateData = this.state.data;
               for (var i = 0; i < stateData.length; i++) {
-                if (stateData[i].Ticker == stockPurchase.Ticker) {
-                
-                  var totalAmount =
-                    stateData[i].Amount +
-                    stockPurchase.Amount;
-               
-                  var totalCost =
-                    objData* totalAmount;
+                if (stateData[i].Ticker === stockPurchase.Ticker) {
+                  var totalAmount = stateData[i].Amount + stockPurchase.Amount;
+
+                  var totalCost = objData * totalAmount;
 
                   stateData[i].Amount = totalAmount;
-                  stateData[i].Total = totalCost ;
+                  stateData[i].Total = totalCost;
                   inStocks = true;
 
-                  var balanceVar =  this.state.Total +stockPurchase.Amount * objData;
-              
-                 
+                  var balanceVar =
+                    this.state.Total + stockPurchase.Amount * objData;
 
                   this.setState({
                     data: stateData,
                     Total: balanceVar
                   });
-            
-                 
+
                   changeUser.stocks = stateData;
-                  
-                 
+
                   break;
                 }
               }
               if (!inStocks) {
-      
                 var itemValue = stockPurchase.Amount;
-               
+
                 itemValue *= objData;
                 stockPurchase.Total = itemValue;
                 stateData.push(stockPurchase);
-      
-                balanceVar =
-                   this.state.Total + stockPurchase.Amount * objData;
+
+                balanceVar = this.state.Total + stockPurchase.Amount * objData;
                 this.setState({
                   data: stateData,
                   Total: balanceVar
                 });
-        
+
                 changeUser.stocks = stateData;
-               
               }
+              const userTransactionData = {
+                id: changeUser.id,
+                transactions: {
+                  Ticker: stockPurchase.Ticker,
+                  Amount: stockPurchase.Amount,
+                  Total: 0
+                }
+              };
+         
+              changeUser.transactions.push(userTransactionData);
+
+              updateTransactions(userTransactionData);
 
               this.props.setChangeUser(this.props.auth.changeUser);
             })
@@ -224,7 +232,6 @@ class Portfolio extends Component {
       .catch(err => {
         alert("Incorrect Ticker/Symbol");
       });
-    
   };
 
   validateForm() {
@@ -241,8 +248,6 @@ class Portfolio extends Component {
   render() {
     //https://codesandbox.io/s/2omrn3oq30 https://www.npmjs.com/package/react-table
 
-    const { changeUser } = this.props.auth;
-    
     //console.log(this.state.data);
     const { errors } = this.state;
     return (
@@ -351,7 +356,7 @@ Portfolio.propTypes = {
 
 const mapStateToProps = state => ({
   user: state.auth.user,
-  changedUser: state.auth.changedUser,
+  changeUser: state.auth.changeUser,
   auth: state.auth,
   errors: state.errors
 });

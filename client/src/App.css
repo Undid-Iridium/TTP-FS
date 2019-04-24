@@ -129,6 +129,17 @@ table.table_on_the_right {
 	border-radius: 4px;
 	vertical-align: bottom;
 }
+
+
+table.table_on_the_left_trans,
+table.table_on_the_right_trans {
+	float: left;
+	display: inline-block;
+	width: 45%;
+	position: relative;
+	border-radius: 4px;
+	vertical-align: bottom;
+}
 .clr{clear:both}
 
 

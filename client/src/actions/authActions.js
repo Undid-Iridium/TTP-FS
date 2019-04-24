@@ -1,8 +1,13 @@
-import axios from "axios";
+//import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING, UPDATE_USER } from "./types";
+import {
+  GET_ERRORS,
+  SET_CURRENT_USER,
+  USER_LOADING,
+  UPDATE_USER
+} from "./types";
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
@@ -61,7 +66,6 @@ export const loginUser = userData => dispatch => {
       localStorage.setItem("state", JSON.stringify(decoded));
       // Set current user
       dispatch(setCurrentUser(decoded));
-     
     })
     .catch(function(err) {
       dispatch({
@@ -72,15 +76,11 @@ export const loginUser = userData => dispatch => {
 };
 //Override set log in jwt_decode(token)
 export const setChangeUser = userData => dispatch => {
-   
-    
-    dispatch(overwriteLogin(userData));
+  dispatch(overwriteLogin(userData));
 };
-
 
 //Overwrite logged in user
 export const overwriteLogin = decoded => {
-  
   localStorage.setItem("state", JSON.stringify(decoded));
   return {
     type: UPDATE_USER,
@@ -88,11 +88,8 @@ export const overwriteLogin = decoded => {
   };
 };
 
-
 // Set logged in user
 export const setCurrentUser = decoded => {
-
-  
   return {
     type: SET_CURRENT_USER,
     payload: decoded

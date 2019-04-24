@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER, USER_LOADING, UPDATE_USER} from "../actions/types";
+import { SET_CURRENT_USER, USER_LOADING, UPDATE_USER } from "../actions/types";
 
 const isEmpty = require("is-empty");
 
@@ -10,14 +10,13 @@ const initialState = {
 };
 
 export default function(state = initialState, action) {
-  
   switch (action.type) {
     case SET_CURRENT_USER:
       return {
         ...state,
         isAuthenticated: !isEmpty(action.payload),
         user: action.payload,
-        changeUser : action.payload
+        changeUser: action.payload
       };
     case USER_LOADING:
       return {
@@ -25,17 +24,14 @@ export default function(state = initialState, action) {
         loading: true
       };
     case UPDATE_USER:
-     
-       return {
-
+      return {
         ...state,
-        user : state.user,
+        user: state.user,
         isAuthenticated: !isEmpty(action.payload),
-        changeUser : action.payload
-
-
+        changeUser: action.payload
       };
-   default:
+    default:
       return state;
   }
 }
+

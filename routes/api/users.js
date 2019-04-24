@@ -26,7 +26,6 @@ router.post("/register", (req, res) => {
     return res.status(400).json(errors);
   }
   User.findOne({ email: req.body.email }).then(user => {
-   
     if (user) {
       return res.status(400).json({ error: "Email already exists" });
     } else {
@@ -54,11 +53,53 @@ router.post("/register", (req, res) => {
   });
 });
 
+router.use("/updateTransaction", function(req, res, next) {
+  next();
+});
+
+router.post("/updateTransaction", (req, res) => {
+  console.log(req.body);
+  console.log("Let's see");
+  const id = req.body.id;
+  const details = { _id: new ObjectID(id) };
+
+  // Find user by email
+  User.findOne(details).then(user => {
+    if (!user) {
+      return res.status(404).json({ error: "Could not update Transactions" });
+    }
+
+    if (req.body.transactions) {
+      console.log("This far");
+      var inTransactions = false;
+      for (var i = 0; i < user.transactions.length; i++) {
+        if (user.transactions[i].Ticker == req.body.transactions.Ticker) {
+          user.transactions[i].Amount += req.body.transactions.Amount;
+          inTransactions = true;
+          break;
+        }
+      }
+      if (!inTransactions) {
+        user.transactions.push(req.body.transactions);
+      }
+      console.log("Even further");
+      User.updateOne(details, user, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          return res
+            .status(200)
+            .json({ response: "Success", balance: user.balance });
+        }
+      });
+    }
+  }).catch(err => console.log(err));
+});
+
 // @route POST api/users/login
 // @desc Login user and return JWT token
 // @access Public
 router.use("/updateStock", function(req, res, next) {
-
   next();
 });
 
@@ -68,41 +109,38 @@ router.post("/updateStock", (req, res) => {
 
   // Find user by email
   User.findOne(details).then(user => {
-
     if (!user) {
       return res.status(404).json({ error: "Could not update" });
     }
     user.balance -= req.body.cost;
-    if(req.body.stock){
-        var inStocks = false;
-        for(var i = 0; i < user.stocks.length; i++)
-        {
-          if(user.stocks[i].Ticker == req.body.stock.Ticker)
-          {
-            user.stocks[i].Amount =  parseInt(user.stocks[i].Amount, 10) + parseInt(req.body.stock.Amount, 10);
-            inStocks = true;
-            break;
-          }
+    if (req.body.stock) {
+      var inStocks = false;
+      for (var i = 0; i < user.stocks.length; i++) {
+        if (user.stocks[i].Ticker == req.body.stock.Ticker) {
+          user.stocks[i].Amount =
+            parseInt(user.stocks[i].Amount, 10) +
+            parseInt(req.body.stock.Amount, 10);
+          inStocks = true;
+          break;
         }
-        if(!inStocks){
-            user.stocks.push(req.body.stock);
-        }
-    }
-    User.updateOne(details, user, (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-       
-        return res
-          .status(200)
-          .json({ response: "Success", balance: user.balance });
       }
-    });
+      if (!inStocks) {
+        user.stocks.push(req.body.stock);
+      }
+      User.updateOne(details, user, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          return res
+            .status(200)
+            .json({ response: "Success", balance: user.balance });
+        }
+      });
+    }
   });
 });
 
 router.use("/login", function(req, res, next) {
-
   next();
 });
 
@@ -138,7 +176,6 @@ router.post("/login", (req, res) => {
           stocks: user.stocks,
           transactions: user.transactions
         };
-    
 
         // Sign token
         jwt.sign(

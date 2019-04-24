@@ -11,6 +11,8 @@ export default class StockList extends Component {
     fetch("https://api.iextrading.com/1.0/ref-data/symbols")
       .then(response => response.json())
       .then(objData => {
+        console.log(objData);
+
         //console.log(objData);
         const half = objData.length / 2;
         //console.log(half);
