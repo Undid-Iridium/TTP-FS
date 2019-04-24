@@ -58,8 +58,7 @@ router.use("/updateTransaction", function(req, res, next) {
 });
 
 router.post("/updateTransaction", (req, res) => {
-  console.log(req.body);
-  console.log("Let's see");
+ 
   const id = req.body.id;
   const details = { _id: new ObjectID(id) };
 
@@ -71,7 +70,7 @@ router.post("/updateTransaction", (req, res) => {
       }
 
       if (req.body.transactions) {
-        console.log("This far");
+      
         var inTransactions = false;
         for (var i = 0; i < user.transactions.length; i++) {
           if (user.transactions[i].Ticker == req.body.transactions.Ticker) {
@@ -83,7 +82,7 @@ router.post("/updateTransaction", (req, res) => {
         if (!inTransactions) {
           user.transactions.push(req.body.transactions);
         }
-        console.log("Even further");
+    
         User.updateOne(details, user, (err, result) => {
           if (err) {
             console.log(err);

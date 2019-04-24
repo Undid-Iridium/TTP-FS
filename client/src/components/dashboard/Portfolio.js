@@ -49,12 +49,6 @@ const updateTransactions = async userData => {
   return result;
 };
 
-/*function findElement(arr, propName, propValue) {
-  for (var i = 0; i < arr.length; i++)
-    if (arr[i][propName] == propValue) return arr[i];
-
-  // will return undefined if not found; you could return a default instead   backgroundSize: 'cover',
-}*/
 
 function isInt(n) {
   return n % 1 === 0;
@@ -89,17 +83,22 @@ class Portfolio extends Component {
 
     for (var item of changeUser.stocks) {
       var symbol = item.Ticker;
-
+      var openPrice;
+      var currPrice;
       var link = "https://api.iextrading.com/1.0/stock/" + symbol + "/price";
+      var linkOpen =
+        "https://api.iextrading.com/1.0/stock/" + symbol + "/chart/dynamic";
       var currtotal = await fetch(link)
         .then(objOri => objOri.json())
         .then(objData => {
+          currPrice = objData;
           var itemValue = parseInt(item.Amount, 10);
           itemValue *= objData;
           stockObj.push({
             Ticker: symbol,
             Amount: item.Amount,
-            Total: itemValue
+            Total: itemValue,
+            Open: 0
           });
 
           return itemValue;
@@ -110,11 +109,29 @@ class Portfolio extends Component {
       this.setState({
         Total: this.state.Total + currtotal
       });
+     
+      var openV = await fetch(linkOpen)
+        .then(objOri => objOri.json())
+        .then(objData => {
+          openPrice = objData.data[0].marketOpen;
+          console.log(openPrice, "OPEN PRICE", currPrice);
+
+          var deterOpen;
+          if (openPrice > currPrice) {
+            deterOpen = 3;
+          } else if (openPrice < currPrice) {
+            deterOpen = 1;
+          } else {
+            deterOpen = 2;
+          }
+          stockObj[stockObj.length - 1].Open = deterOpen;
+        });
     }
 
     this.setState({
       data: stockObj
     });
+   
     localStorage.setItem("balance", this.props.auth.changeUser.balance);
     this.setState({ balance: this.props.auth.changeUser.balance });
   }
@@ -142,11 +159,15 @@ class Portfolio extends Component {
       Total: 0
     };
     var symbol = this.state.Ticker;
-
+    var currPrice;
+    var openPrice;
     var link = "https://api.iextrading.com/1.0/stock/" + symbol + "/price";
+     var linkOpen =
+        "https://api.iextrading.com/1.0/stock/" + symbol + "/chart/dynamic";
     fetch(link)
       .then(objOri => objOri.json())
       .then(objData => {
+        currPrice = objData;
         if (objData * stockPurchase.Amount > changeUser.balance) {
           alert("You do not have sufficient funds");
         } else {
@@ -157,10 +178,25 @@ class Portfolio extends Component {
             stock: {
               Ticker: stockPurchase.Ticker,
               Amount: stockPurchase.Amount,
-              Total: 0
+              Total: 0,
+              Open: 0
             }
           };
+         fetch(linkOpen)
+        .then(objOri => objOri.json())
+        .then(objVar => {
+          openPrice = objVar.data[0].marketOpen;
+          console.log(openPrice, "OPEN PRICE", currPrice);
 
+          var deterOpen;
+          if (openPrice > currPrice) {
+            deterOpen = 3;
+          } else if (openPrice < currPrice) {
+            deterOpen = 1;
+          } else {
+            deterOpen = 2;
+          }
+          userData.Open = deterOpen;
           updateUser(userData)
             .then(result => {
               this.setState({ balance: result.balance });
@@ -227,6 +263,10 @@ class Portfolio extends Component {
               stockPurchase.Ticker
             } Stock!`
           );
+          console.log(changeUser);
+        });
+
+          
         }
       })
       .catch(err => {

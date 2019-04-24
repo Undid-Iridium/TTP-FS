@@ -29,7 +29,7 @@ export const registerUser = (userData, history) => dispatch => {
           payload: res.error
         });
         console.log(res.error);
-        alert("Email already exists Dude");
+        alert("Email already exists");
       }
     })
     .catch(function(err) {
@@ -38,7 +38,7 @@ export const registerUser = (userData, history) => dispatch => {
         payload: err.response
       });
       console.log(err.response);
-      alert("Email already exists Dude");
+      alert("Email already exists");
     });
 };
 
