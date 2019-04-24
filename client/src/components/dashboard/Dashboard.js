@@ -15,13 +15,10 @@ const divStyle = {
   top: "-25px"
 };
 
-
 class Dashboard extends Component {
- 
-
   render() {
     const { user } = this.props.auth;
-   
+
     return (
       <div style={divStyle} className="container valign-wrapper">
         <div className="row">
@@ -30,10 +27,9 @@ class Dashboard extends Component {
               <b>Hey there,</b> {user.name.split(" ")[0]}
               <p className="flow-text grey-text text-darken-1">
                 You are logged into your dashboard!{" "}
-                <span style={{ fontFamily: "monospace" }}>StockTTP</span>  App 👏
+                <span style={{ fontFamily: "monospace" }}>StockTTP</span> App 👏
               </p>
             </h4>
-            
           </div>
         </div>
       </div>
@@ -41,14 +37,11 @@ class Dashboard extends Component {
   }
 }
 
-
-
 const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(
-  mapStateToProps
-)(Dashboard);
+export default connect(mapStateToProps)(Dashboard);
 
 //Can use this page to show summary of stocks
+

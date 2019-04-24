@@ -15,8 +15,6 @@ const divStyle = {
   top: "-25px"
 };
 
-
-
 class Transactions extends Component {
   constructor(props) {
     super(props);
@@ -27,24 +25,20 @@ class Transactions extends Component {
     const { changeUser } = this.props.auth;
     var objData = [];
     var json = changeUser.transactions;
-    for(var value in json){
-        objData.push(json[value].transactions);
+    for (var value in json) {
+      objData.push(json[value].transactions);
     }
     console.log("HERRO", objData);
     if (objData.length === 0) {
       console.log("empty");
-      objData = [
-        { transactions: "EMPTY" },
-      ];
+      objData = [{ transactions: "EMPTY" }];
     }
 
-        this.setState({
-          loading: false,
-          stocksFirstHalf: objData,
-          stocksSecondHalf: []
-        });
-
-    
+    this.setState({
+      loading: false,
+      stocksFirstHalf: objData,
+      stocksSecondHalf: []
+    });
   }
 
   render() {
@@ -57,7 +51,9 @@ class Transactions extends Component {
             {this.state.stocksFirstHalf.map(function(item, key) {
               return (
                 <tr key={key}>
-                  <td className = " less-padding-on-right ">BUY  ({item.Ticker})&emsp;-  </td>
+                  <td className=" less-padding-on-right ">
+                    BUY ({item.Ticker})&emsp;-{" "}
+                  </td>
                   <td>{item.Amount} Shares</td>
                   <td>@{item.Price} </td>
                 </tr>
@@ -71,7 +67,7 @@ class Transactions extends Component {
             {this.state.stocksSecondHalf.map(function(item, key) {
               return (
                 <tr key={key}>
-                   <td>BUY({item.Ticker}) -</td>
+                  <td>BUY({item.Ticker}) -</td>
                   <td>{item.Amount} Shares</td>
                 </tr>
               );

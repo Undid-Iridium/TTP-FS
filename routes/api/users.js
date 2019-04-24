@@ -64,36 +64,38 @@ router.post("/updateTransaction", (req, res) => {
   const details = { _id: new ObjectID(id) };
 
   // Find user by email
-  User.findOne(details).then(user => {
-    if (!user) {
-      return res.status(404).json({ error: "Could not update Transactions" });
-    }
+  User.findOne(details)
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({ error: "Could not update Transactions" });
+      }
 
-    if (req.body.transactions) {
-      console.log("This far");
-      var inTransactions = false;
-      for (var i = 0; i < user.transactions.length; i++) {
-        if (user.transactions[i].Ticker == req.body.transactions.Ticker) {
-          user.transactions[i].Amount += req.body.transactions.Amount;
-          inTransactions = true;
-          break;
+      if (req.body.transactions) {
+        console.log("This far");
+        var inTransactions = false;
+        for (var i = 0; i < user.transactions.length; i++) {
+          if (user.transactions[i].Ticker == req.body.transactions.Ticker) {
+            user.transactions[i].Amount += req.body.transactions.Amount;
+            inTransactions = true;
+            break;
+          }
         }
-      }
-      if (!inTransactions) {
-        user.transactions.push(req.body.transactions);
-      }
-      console.log("Even further");
-      User.updateOne(details, user, (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          return res
-            .status(200)
-            .json({ response: "Success", balance: user.balance });
+        if (!inTransactions) {
+          user.transactions.push(req.body.transactions);
         }
-      });
-    }
-  }).catch(err => console.log(err));
+        console.log("Even further");
+        User.updateOne(details, user, (err, result) => {
+          if (err) {
+            console.log(err);
+          } else {
+            return res
+              .status(200)
+              .json({ response: "Success", balance: user.balance });
+          }
+        });
+      }
+    })
+    .catch(err => console.log(err));
 });
 
 // @route POST api/users/login

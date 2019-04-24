@@ -3,21 +3,13 @@ import React, { Component } from "react";
 import "../../App.css";
 import mainLogo from "../../stocklist.png";
 
-
-
 const divStyle = {
   width: "100%",
   minHeight: "100vh",
   height: "234950px",
   backgroundImage: `url(${mainLogo})`,
-  backgroundrepeat: "repeat",
- 
-
+  backgroundrepeat: "repeat"
 };
-
-
-
-
 
 export default class StockList extends Component {
   constructor(props) {

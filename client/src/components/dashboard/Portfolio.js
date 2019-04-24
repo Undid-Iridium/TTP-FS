@@ -214,7 +214,7 @@ class Portfolio extends Component {
                   Price: objData
                 }
               };
-         
+
               changeUser.transactions.push(userTransactionData);
 
               updateTransactions(userTransactionData);
