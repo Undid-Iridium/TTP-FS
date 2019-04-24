@@ -84,12 +84,12 @@ class Portfolio extends Component {
       var currtotal = await fetch(link)
         .then(objOri => objOri.json())
         .then(objData => {
-          var itemValue = item.Amount;
+          var itemValue = parseInt(item.Amount, 10);
           itemValue *= objData;
           stockObj.push({
             Ticker: symbol,
             Amount: item.Amount,
-            Total: parseInt(itemValue,10)
+            Total: itemValue
           });
           
          return itemValue;
@@ -98,7 +98,7 @@ class Portfolio extends Component {
           console.log(err);
         });
       this.setState({
-            Total: parseInt(this.state.Total + currtotal, 10)
+            Total:this.state.Total + currtotal
       });
     }
  
@@ -166,23 +166,23 @@ class Portfolio extends Component {
                 if (stateData[i].Ticker == stockPurchase.Ticker) {
                 
                   var totalAmount =
-                    parseInt(stateData[i].Amount, 10) +
-                    parseInt(stockPurchase.Amount, 10);
+                    stateData[i].Amount +
+                    stockPurchase.Amount;
                
                   var totalCost =
                     objData* totalAmount;
 
                   stateData[i].Amount = totalAmount;
-                  stateData[i].Total = parseInt(totalCost,10) ;
+                  stateData[i].Total = totalCost ;
                   inStocks = true;
 
-                  var balanceVar =  parseInt(this.state.Total,10) + parseInt(stockPurchase.Amount, 10) * parseInt(objData, 10);
+                  var balanceVar =  this.state.Total +stockPurchase.Amount * objData;
               
                  
 
                   this.setState({
                     data: stateData,
-                    Total: parseInt(balanceVar, 10)
+                    Total: balanceVar
                   });
             
                  
@@ -196,15 +196,15 @@ class Portfolio extends Component {
       
                 var itemValue = stockPurchase.Amount;
                
-                itemValue *= parseInt(objData, 10);
-                stockPurchase.Total = parseInt(itemValue, 10);
+                itemValue *= objData;
+                stockPurchase.Total = itemValue;
                 stateData.push(stockPurchase);
-                var balanceVar = this.state.Total;
+      
                 balanceVar =
-                   parseInt(this.state.Total,10) + parseInt(stockPurchase.Amount, 10) * parseInt(objData, 10);
+                   this.state.Total + stockPurchase.Amount * objData;
                 this.setState({
                   data: stateData,
-                  Total: parseInt(balanceVar, 10)
+                  Total: balanceVar
                 });
         
                 changeUser.stocks = stateData;

@@ -26,7 +26,7 @@ router.post("/register", (req, res) => {
     return res.status(400).json(errors);
   }
   User.findOne({ email: req.body.email }).then(user => {
-    console.log(user);
+   
     if (user) {
       return res.status(400).json({ error: "Email already exists" });
     } else {
@@ -92,7 +92,7 @@ router.post("/updateStock", (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        console.log("yay we got here");
+       
         return res
           .status(200)
           .json({ response: "Success", balance: user.balance });
@@ -102,8 +102,7 @@ router.post("/updateStock", (req, res) => {
 });
 
 router.use("/login", function(req, res, next) {
-  console.log("Got this far");
-  console.log(req.body);
+
   next();
 });
 
@@ -139,7 +138,7 @@ router.post("/login", (req, res) => {
           stocks: user.stocks,
           transactions: user.transactions
         };
-        console.log(payload);
+    
 
         // Sign token
         jwt.sign(
