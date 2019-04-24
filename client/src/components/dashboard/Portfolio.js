@@ -5,9 +5,9 @@ import "../../App.css";
 import mainLogo from "../../interlaced.png";
 import PropTypes from "prop-types";
 import Table1 from "../layout/Table";
-import { overrideCurrentUser } from "../../actions/authActions";
+import { setChangeUser } from "../../actions/authActions";
 const updateUser = async userData => {
-  console.log(userData);
+
   var result = await fetch("http://localhost:5000/api/users/updateStock", {
     method: "POST",
     headers: {
@@ -23,7 +23,7 @@ const updateUser = async userData => {
     .catch(function(err) {
       console.log(err);
     });
-  console.log("wait..", result);
+
   return result;
 };
 
@@ -35,7 +35,7 @@ function findElement(arr, propName, propValue) {
 }
 
 const updateAll = dataV => () => {
-  overrideCurrentUser(dataV);
+  setChangeUser(dataV);
 };
 
 function isInt(n) {
@@ -74,13 +74,14 @@ class Portfolio extends Component {
   }
   async componentDidMount() {
     //const data = await  axios.get('https://api.iextrading.com/1.0/ref-data/symbols').then(function (response) { console.log(response); return response;}).catch(error => console.log(error));
-    const { user } = this.props.auth;
+    const { changeUser } = this.props.auth;
     var stockObj = [];
-
-    for (var item of user.stocks) {
+    console.log(changeUser.stocks);
+    for (var item of changeUser.stocks) {
       var symbol = item.Ticker;
+
       var link = "https://api.iextrading.com/1.0/stock/" + symbol + "/price";
-      fetch(link)
+      var currtotal = await fetch(link)
         .then(objOri => objOri.json())
         .then(objData => {
           var itemValue = item.Amount;
@@ -88,35 +89,37 @@ class Portfolio extends Component {
           stockObj.push({
             Ticker: symbol,
             Amount: item.Amount,
-            Total: parseInt(itemValue, 10)
+            Total: itemValue
           });
-
-          this.setState({
-            data: stockObj,
-            Total: this.state.Total + itemValue
-          });
+          
+         return itemValue;
         })
         .catch(err => {
           console.log(err);
         });
+      this.setState({
+            Total: this.state.Total + currtotal
+      });
     }
-     localStorage.setItem("balance", user.balance);
- 
-      this.setState({ balance: user.balance});
-  
+    console.log(stockObj, "WHAT");
+    this.setState({
+            data: stockObj,
+    });
+    localStorage.setItem("balance", this.props.auth.changeUser.balance);
+    this.setState({ balance: this.props.auth.changeUser.balance });
+
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("WHAT");
-    console.log(this.props.auth.user);
+  
     if (this.props.balance !== nextProps.balance) {
-      if (this.props.balance > this.props.auth.user.balance) {
+      if (this.props.balance > this.props.auth.changeUser.balance) {
         //Post request to check correct number, at that rate might as well always do post request.
-        //localStorage.setItem("balance", this.props.auth.user.balance);
+        //localStorage.setItem("balance", this.props.auth.changeUser.balance);
       }
       //this.setState({ balance: localStorage.balance });
     }
-    console.log(this.state.data);
+  
   }
 
   onChange = e => {
@@ -124,33 +127,30 @@ class Portfolio extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
-    const { user } = this.props.auth;
-    console.log(this.state.data);
-    //var totalP =
-    //findElement(this.state.data, "Ticker", this.state.Ticker).Total;
-
-    //console.log("totalP :   " + totalP);
+    const { changeUser } = this.props.auth;
+   
     const stockPurchase = {
       Ticker: this.state.Ticker,
       Amount: parseInt(this.state.Quantity, 10),
       Total: 0
     };
     var symbol = this.state.Ticker;
-    console.log(symbol);
+  
     var link = "https://api.iextrading.com/1.0/stock/" + symbol + "/price";
     fetch(link)
       .then(objOri => objOri.json())
       .then(objData => {
-        if (objData * stockPurchase.Quantity > user.balance) {
+        if (objData * stockPurchase.Quantity > changeUser.balance) {
           alert("You do not have sufficient funds");
         } else {
           stockPurchase.value = objData * stockPurchase.Amount;
           const userData = {
-            id: user.id,
+            id: changeUser.id,
             cost: stockPurchase.value,
             stock: {
               Ticker: stockPurchase.Ticker,
-              Amount: stockPurchase.Amount
+              Amount: stockPurchase.Amount,
+              Total : 0
             }
           };
           var newData;
@@ -158,29 +158,36 @@ class Portfolio extends Component {
             .then(result => {
               this.setState({ balance: result.balance });
               localStorage.balance = result.balance;
-
+              changeUser.balance = result.balance;
               var inStocks = false;
               var stateData = this.state.data;
               for (var i = 0; i < stateData.length; i++) {
                 if (stateData[i].Ticker == stockPurchase.Ticker) {
-
+                  console.log("pre total " , stateData[i].Amount, stockPurchase.Amount);
                   var totalAmount =
                     parseInt(stateData[i].Amount, 10) +
                     parseInt(stockPurchase.Amount, 10);
+                  console.log("totalAMount" , totalAmount);
                   var totalCost =
                     parseInt(objData, 10) * parseInt(totalAmount, 10);
-  
+
                   stateData[i].Amount = totalAmount;
-                  stateData[i].Total = totalCost;
+                  stateData[i].Total = parseInt(totalCost,10) + parseInt(stockPurchase.Amount, 10) * parseInt(objData, 10) ;
                   inStocks = true;
 
-                  var balanceVar = this.state.Total;
+                  var balanceVar =  parseInt(this.state.Total,10) + parseInt(stockPurchase.Amount, 10) * parseInt(objData, 10);
+                  console.log("this.state.Total", this.state.Total);
+                  console.log("NEW TOTAL" , stateData[i].Total);
+                 
 
-                  balanceVar +=
-                    parseInt(stockPurchase.Amount, 10) *
-                    parseInt(objData, 10);
-
-                  this.setState({ data: stateData, Total: balanceVar });
+                  this.setState({
+                    data: stateData,
+                    Total: parseInt(balanceVar, 10)
+                  });
+                  console.log(stateData);
+                 
+                  changeUser.stocks = stateData;
+                  
                   console.log("FOUND IN STOCKS");
                   break;
                 }
@@ -188,18 +195,23 @@ class Portfolio extends Component {
               if (!inStocks) {
                 console.log("NOT IN STOCKS");
                 var itemValue = stockPurchase.Amount;
-                console.log(itemValue);
+               
                 itemValue *= objData;
-                stockPurchase.Total = parseInt(itemValue,10);
+                stockPurchase.Total = parseInt(itemValue, 10);
                 stateData.push(stockPurchase);
                 var balanceVar = this.state.Total;
                 balanceVar +=
-                    parseInt(stockPurchase.Amount, 10) *
-                    parseInt(objData, 10);
-                this.setState({ data: stateData, Total: parseInt(balanceVar,10)});
-                console.log(stockPurchase);
+                  parseInt(stockPurchase.Amount, 10) * parseInt(objData, 10);
+                this.setState({
+                  data: stateData,
+                  Total: parseInt(balanceVar, 10)
+                });
+                console.log("STATE DATA", stateData);
+                changeUser.stocks = stateData;
+               
               }
-              this.props.overrideCurrentUser(this.props.auth);
+
+              this.props.setChangeUser(this.props.auth.changeUser);
             })
             .catch(err => console.log(err));
           alert(
@@ -229,7 +241,8 @@ class Portfolio extends Component {
   render() {
     //https://codesandbox.io/s/2omrn3oq30 https://www.npmjs.com/package/react-table
 
-    const { user } = this.props.auth;
+    const { changeUser } = this.props.auth;
+    
     //console.log(this.state.data);
     const { errors } = this.state;
     return (
@@ -239,7 +252,7 @@ class Portfolio extends Component {
             <div className="separateScreenLeft">
               <div className="childFont">
                 <p style={{ textAlign: "left" }}>
-                  Portfolio: (${parseInt(this.state.Total,10)}){" "}
+                  Portfolio: (${parseInt(this.state.Total, 10)}){" "}
                 </p>
               </div>
               <Table1 data={this.state.data} />
@@ -253,7 +266,10 @@ class Portfolio extends Component {
                     <div className="divBox">
                       <p style={({ color: "#2d2d2d" }, { fontSize: 20 })}>
                         {" "}
-                        Account Balance: ${parseInt(this.state.balance,10)}{" "}
+                        Account Balance: ${parseInt(
+                          this.state.balance,
+                          10
+                        )}{" "}
                       </p>
                     </div>
                   </div>
@@ -327,7 +343,7 @@ class Portfolio extends Component {
 }
 
 Portfolio.propTypes = {
-  overrideCurrentUser: PropTypes.func.isRequired,
+  setChangeUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired
@@ -335,14 +351,17 @@ Portfolio.propTypes = {
 
 const mapStateToProps = state => ({
   user: state.auth.user,
+  changedUser: state.auth.changedUser,
   auth: state.auth,
   errors: state.errors
 });
 
 function mapDispatchToProps(dispatch) {
-    return({
-        overrideCurrentUser: (decode) => {dispatch(overrideCurrentUser(decode))}
-    })
+  return {
+    setChangeUser: decode => {
+      dispatch(setChangeUser(decode));
+    }
+  };
 }
 
 export default connect(

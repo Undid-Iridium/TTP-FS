@@ -11,13 +11,13 @@ class Table1 extends Component {
       <div>
         <BootstrapTable data={this.props.data} >
           <TableHeaderColumn isKey dataField='Ticker'  width={'35%'}>
-           
+           Ticker
           </TableHeaderColumn>
           <TableHeaderColumn dataField='Amount' width={'35%'}>
-         
+           Stock Owned
           </TableHeaderColumn>
           <TableHeaderColumn dataField='Total' width={'35%'}>
-         
+           Total Revenue
           </TableHeaderColumn>
         </BootstrapTable>
       </div>
